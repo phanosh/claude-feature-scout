@@ -92,7 +92,7 @@ Phase 4: Present top recommendations in 3 tiers
          (Quick Wins / Power-Ups / Deep Cuts)
 ```
 
-The feature database updates weekly via an automated pipeline that searches for new tips from [@claudeai](https://x.com/claudeai), [@bcherny](https://x.com/bcherny), [@amorriscode](https://x.com/amorriscode), and official docs.
+The feature database updates weekly via a Claude Code scheduled agent (`/schedule weekly /scrape-features`) that searches for new tips from [@claudeai](https://x.com/claudeai), [@bcherny](https://x.com/bcherny), [@amorriscode](https://x.com/amorriscode), and official docs. No CI or API keys needed -- runs on your Max subscription.
 
 ## Feature Database
 
@@ -123,12 +123,32 @@ Quick version:
 
 ## Automated Updates
 
-A weekly GitHub Actions pipeline:
-1. Uses Claude Code + WebSearch to find new tips from tracked Twitter accounts and docs
-2. Validates and deduplicates against existing entries
-3. Opens a PR for human review before merging
+The feature database stays fresh via Claude Code's built-in `/schedule` feature -- no CI, no API keys, no extra cost on Max.
 
-To set up the pipeline on your fork, add an `ANTHROPIC_API_KEY` secret to your repository settings.
+### Setup (one-time)
+
+Run this in the claude-feature-scout repo directory:
+
+```
+/schedule weekly /scrape-features
+```
+
+This creates a scheduled agent that runs every week, searches Twitter/X and docs for new Claude Code tips, deduplicates against the existing database, and pushes updates directly.
+
+### Manual scrape
+
+You can also run the scraper anytime:
+
+```
+/scrape-features
+```
+
+### How it works
+
+1. Claude Code uses WebSearch to find new tips from tracked accounts (@claudeai, @bcherny, @amorriscode) and official docs
+2. Deduplicates against existing entries (by ID, source URL, and title similarity)
+3. Validates new entries against the schema
+4. Commits and pushes to the repo
 
 ## License
 
