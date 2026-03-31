@@ -8,7 +8,7 @@ This plugin fixes that. It watches the firehose so you don't have to, then tells
 
 1. You run `/claude-tips` inside any project
 2. It reads your codebase -- language, framework, test setup, CI, git patterns, existing Claude config
-3. It checks its database of 130+ features and tells you what you're missing
+3. It checks its database of 140+ features and tells you what you're missing
 4. Recommendations are specific to your project, not generic "did you know" lists
 
 If you're not in a project directory, it asks what you're working on and gives you relevant tips anyway.
@@ -51,9 +51,23 @@ This runs a Claude agent that searches Twitter/X ([@claudeai](https://x.com/clau
 
 You can also run `/scrape-features` manually anytime.
 
+## Latest scrape (March 31, 2026)
+
+9 new features added, bringing the database to **141 total**. Highlights:
+
+- **Auto mode** -- a safer alternative to `--dangerously-skip-permissions`. A safety classifier auto-approves low-risk actions and blocks destructive ones. Research preview as of March 24.
+- **Computer Use** -- Claude Code can now interact directly with your screen (point, click, type, scroll). Activates automatically when built-in tools aren't enough. macOS only, Pro/Max.
+- **/loop** -- run any prompt on a recurring interval (`/loop 5m check the deploy`). Turns Claude Code into a background monitoring worker.
+- **/effort** -- control reasoning depth per session: `low`, `medium`, `high`, or `max` (Opus only).
+- **--bare flag** -- minimal overhead scripted calls that skip hooks, LSP, and plugins.
+- **/terminal-setup** -- one command to enable shift+enter for multi-line prompts.
+- **MCP elicitation** -- MCP servers can now request structured input mid-task via forms or browser URLs.
+- **PermissionDenied hook** -- fires when auto mode's classifier blocks an action. Useful for logging.
+- **CLAUDE_CODE_NO_FLICKER** -- env var for flicker-free terminal rendering.
+
 ## What's in the database
 
-130+ features across 10 categories, sourced from official docs, power users, and the community:
+141 features across 10 categories, sourced from official docs, power users, and the community:
 
 - **workflow** -- worktrees, planning mode, parallel sessions, batch commands
 - **configuration** -- CLAUDE.md, model selection, permissions, settings
