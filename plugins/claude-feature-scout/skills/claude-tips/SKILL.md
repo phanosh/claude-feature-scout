@@ -9,6 +9,8 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
+  - Edit
+  - Write
   - AskUserQuestion
 ---
 
@@ -162,7 +164,7 @@ Sort all features by score descending. Take the top 10-15 features.
 
 ---
 
-## Phase 5: Present Results
+## Phase 5: Build an Action Plan
 
 Partition the top features into three tiers based on their `difficulty` field and score:
 
@@ -170,47 +172,75 @@ Partition the top features into three tiers based on their `difficulty` field an
 - **Power-Ups**: features with difficulty "intermediate" that are worth the setup investment (next 3-5)
 - **Deep Cuts**: features with difficulty "advanced" that are particularly suited to the detected framework/language/workflow (final 2-3)
 
+For each feature, determine a **concrete implementation step** -- what exactly needs to be created, edited, or configured in THIS project to adopt the feature. Be specific: name the files, the config keys, the commands.
+
 Format the output exactly as follows:
 
 ```markdown
-## Quick Wins
+# Action Plan for [project name or directory]
+
+Here's what you could set up in this project, ranked by effort.
+
+---
+
+## Quick Wins (< 5 min each)
 Features you can start using right now with zero setup.
 
-### [Feature Title]
-**Why for your project:** [One sentence explaining relevance to THIS specific project, referencing detected language/framework/patterns]
+### 1. [Feature Title]
+**Why:** [One sentence explaining relevance to THIS specific project, referencing detected language/framework/patterns]
+**To implement:** [1-3 concrete steps -- e.g. "Add this to your CLAUDE.md", "Run this command", "Create .claude/settings.json with..."]
 **Example:**
 [A concrete code or command example tailored to the project]
-**Difficulty:** [beginner/intermediate/advanced]
 
 ---
 
-## Power-Ups
+## Power-Ups (15-30 min each)
 Features worth the setup investment for your workflow.
 
-### [Feature Title]
-**Why for your project:** [One sentence explaining relevance to THIS specific project]
+### [N]. [Feature Title]
+**Why:** [One sentence explaining relevance to THIS specific project]
+**To implement:** [Concrete steps for this project]
 **Example:**
 [A concrete code or command example tailored to the project]
-**Difficulty:** [beginner/intermediate/advanced]
 
 ---
 
-## Deep Cuts
+## Deep Cuts (may need exploration)
 Advanced features particularly suited to your [detected framework/language/workflow].
 
-### [Feature Title]
-**Why for your project:** [One sentence explaining relevance to THIS specific project]
+### [N]. [Feature Title]
+**Why:** [One sentence explaining relevance to THIS specific project]
+**To implement:** [Concrete steps for this project]
 **Example:**
 [A concrete code or command example tailored to the project]
-**Difficulty:** [beginner/intermediate/advanced]
 ```
 
-End every output with this footer:
+Number every feature sequentially across all tiers (1, 2, 3... through the entire plan).
+
+End the plan with this footer:
 
 ```markdown
 ---
 *Database: [N] features | Last updated: [date from database metadata] | Run `/claude-tips all` for full catalog*
-*Found something useful? Run `/claude-tips [topic]` to dive deeper.*
 ```
 
 Replace `[N]` with the actual feature count and `[date]` with the `last_updated` field from the database metadata.
+
+---
+
+## Phase 6: Offer to Implement Quick Wins
+
+After presenting the plan, use AskUserQuestion to ask:
+
+> Want me to start implementing the Quick Wins? I can set up items [list the Quick Win numbers] right now -- they're all low-hanging fruit that take under 5 minutes each. Or pick specific numbers from the plan if you'd prefer to start elsewhere.
+
+Provide these options:
+1. **"Yes, do the Quick Wins"** -- proceed to implement all Quick Win items sequentially. For each one: make the change (create/edit files, run commands), then briefly confirm what was done before moving to the next.
+2. **"Let me pick"** -- ask which numbers from the plan they want, then implement those.
+3. **"Just the plan, thanks"** -- stop here, the user will act on it themselves.
+
+When implementing features:
+- Make real changes to the project (edit CLAUDE.md, create config files, etc.)
+- After each feature is implemented, briefly state what was done (one line)
+- Do NOT ask for confirmation between each Quick Win -- batch them unless one requires a decision
+- If a feature requires a choice (e.g., which hooks to set up), ask before implementing that specific one
