@@ -22,7 +22,7 @@ Check `$ARGUMENTS` first:
 
 - If `$ARGUMENTS` is **"all"** or **"catalog"**: skip directly to **Catalog Mode** (see below).
 - If `$ARGUMENTS` is **"new"** or **"latest"**: read the feature database at `${SKILL_DIR}/../../data/features.yaml`, sort features by `added_date` descending, and display the 10 most recently added features with their title, description, category, and added date. Then stop.
-- If `$ARGUMENTS` is **"update"**: display the current database version info by reading the top-level metadata from `${SKILL_DIR}/../../data/features.yaml`. Show the version, last_updated date, feature count, and instructions: "To update the plugin, pull the latest from the claude-tips repository: `git -C <plugin-path> pull`". Then stop.
+- If `$ARGUMENTS` is **"update"**: display the current database version info by reading the top-level metadata from `${SKILL_DIR}/../../data/features.yaml`. Show the version, last_updated date, feature count, and instructions: "To update the plugin, run: `claude plugin update claude-feature-scout`". Then stop.
 - If `$ARGUMENTS` is **any other non-empty string**: treat it as a search query. Read the feature database and search features by matching the query against title, description, tags, and category fields (case-insensitive). Display all matching features grouped by category. Then stop.
 
 If `$ARGUMENTS` is empty, proceed to Phase 2.

@@ -15,10 +15,11 @@ If you're not in a project directory, it asks what you're working on and gives y
 
 ## Setup
 
-Clone the plugin into your Claude Code plugins directory:
+Add the marketplace and install the plugin:
 
 ```bash
-git clone https://github.com/phanosh/claude-feature-scout ~/.claude/plugins/claude-feature-scout
+claude plugin marketplace add phanosh/claude-feature-scout
+claude plugin install claude-feature-scout
 ```
 
 Restart Claude Code. The `/claude-tips` and `/scrape-features` commands are now available in any project.
@@ -26,7 +27,7 @@ Restart Claude Code. The `/claude-tips` and `/scrape-features` commands are now 
 To update later:
 
 ```bash
-git -C ~/.claude/plugins/claude-feature-scout pull
+claude plugin update claude-feature-scout
 ```
 
 ## Commands

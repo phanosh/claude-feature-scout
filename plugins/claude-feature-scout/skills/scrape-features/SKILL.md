@@ -75,15 +75,15 @@ For each new feature found, create an entry following the schema:
 
 If new features were found:
 
-1. Append the new entries to `data/features.yaml` under the appropriate category sections
+1. Append the new entries to the features.yaml file (at `${SKILL_DIR}/../../data/features.yaml`) under the appropriate category sections
 2. Update the feature count in the file header comment
-3. Update `last_scraped` dates in `data/sources.yaml` to today
+3. Update `last_scraped` dates in the sources.yaml file (at `${SKILL_DIR}/../../data/sources.yaml`) to today
 
 ## Step 5: Validate
 
-Run the validation script:
+Run the validation script from the plugin root:
 ```bash
-python3 scripts/validate-features.py data/features.yaml
+python3 ${SKILL_DIR}/../../scripts/validate-features.py ${SKILL_DIR}/../../data/features.yaml
 ```
 
 If validation fails, fix the issues and re-run.
@@ -92,7 +92,7 @@ If validation fails, fix the issues and re-run.
 
 If new features were added:
 ```bash
-git add data/features.yaml data/sources.yaml
+git add ${SKILL_DIR}/../../data/features.yaml ${SKILL_DIR}/../../data/sources.yaml
 git commit -m "chore: update feature database (N new features from scrape)"
 git push
 ```

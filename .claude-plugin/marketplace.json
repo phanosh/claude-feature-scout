@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-feature-scout",
+  "description": "Discover Claude Code features relevant to your project with personalized recommendations",
+  "owner": {
+    "name": "Nicodemos Varnava"
+  },
+  "plugins": [
+    {
+      "name": "claude-feature-scout",
+      "description": "Discover Claude Code features relevant to your project. Type /claude-tips for personalized recommendations.",
+      "source": "./plugins/claude-feature-scout",
+      "category": "productivity",
+      "homepage": "https://github.com/phanosh/claude-feature-scout"
+    }
+  ]
+}

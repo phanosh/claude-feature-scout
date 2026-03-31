@@ -5,8 +5,8 @@ Thanks for helping grow the feature database! Every contribution makes Claude Co
 ## Adding a Feature
 
 1. **Fork** this repo and create a branch
-2. **Add your entry** to `data/features.yaml` following the schema below
-3. **Validate** locally: `python scripts/validate-features.py data/features.yaml`
+2. **Add your entry** to `plugins/claude-feature-scout/data/features.yaml` following the schema below
+3. **Validate** locally: `python plugins/claude-feature-scout/scripts/validate-features.py plugins/claude-feature-scout/data/features.yaml`
 4. **Submit a PR** -- CI will validate automatically
 
 ### Entry Schema
@@ -90,15 +90,16 @@ Every feature needs a source:
 
 ```bash
 # Validate the database
-python scripts/validate-features.py data/features.yaml
+python plugins/claude-feature-scout/scripts/validate-features.py plugins/claude-feature-scout/data/features.yaml
 
 # Test the merge/dedup script
-python scripts/merge-scraped.py data/features.yaml /path/to/scraped.yaml
+python plugins/claude-feature-scout/scripts/merge-scraped.py plugins/claude-feature-scout/data/features.yaml /path/to/scraped.yaml
 
 # Install the plugin locally for testing
-claude --plugin-dir /path/to/claude-feature-scout
+claude plugin marketplace add /path/to/claude-feature-scout
+claude plugin install claude-feature-scout
 ```
 
 ## Full Schema Reference
 
-See `data/schema.yaml` for the complete field-by-field schema documentation.
+See `plugins/claude-feature-scout/data/schema.yaml` for the complete field-by-field schema documentation.

@@ -3,7 +3,7 @@ name: Validate Feature Database
 on:
   pull_request:
     paths:
-      - 'data/features.yaml'
+      - 'plugins/claude-feature-scout/data/features.yaml'
 
 jobs:
   validate:
@@ -20,4 +20,4 @@ jobs:
         run: pip install pyyaml
 
       - name: Validate features.yaml
-        run: python scripts/validate-features.py data/features.yaml
+        run: python plugins/claude-feature-scout/scripts/validate-features.py plugins/claude-feature-scout/data/features.yaml
