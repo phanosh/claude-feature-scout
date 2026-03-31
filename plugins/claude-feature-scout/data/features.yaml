@@ -1,6 +1,6 @@
 # Claude Feature Scout - Feature Database
 # Last updated: 2026-03-31
-# Total features: 132
+# Total features: 141
 #
 # Schema: see data/schema.yaml
 # Contributing: see CONTRIBUTING.md
@@ -3837,5 +3837,299 @@ features:
       # 3. Fix the code
       # 4. Run tests again
       # 5. Repeat until green
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # NEW FEATURES - March 2026 Scrape
+  # ============================================================================
+
+  - id: "loop-recurring-tasks"
+    title: "/loop Command for Recurring Interval Tasks"
+    description: |
+      Run a prompt or slash command on a recurring interval within your session.
+      Turns Claude Code into a background worker for monitoring deploys, reviewing
+      PRs, or polling status. Tasks auto-expire after 3 days.
+    category: "automation"
+    tags: [loop, recurring, interval, cron, monitoring, background]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["ci_cd_heavy", "long_running_tasks"]
+      workflow_patterns: ["deployment_monitoring", "pr_review"]
+    difficulty: "intermediate"
+    source:
+      author: "claudeai"
+      url: "https://code.claude.com/docs/en/scheduled-tasks"
+      date: "2026-03-14"
+    example: |
+      # Check deploy status every 5 minutes
+      /loop 5m check the deploy status and notify me if anything fails
+
+      # Review PRs every 30 minutes
+      /loop 30m check for new PRs on this repo and summarize them
+
+      # Supported units: s (seconds), m (minutes), h (hours), d (days)
+      # Requires Claude Code v2.1.72+
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "effort-level-command"
+    title: "/effort Command to Control Reasoning Depth"
+    description: |
+      Set the model's reasoning effort level with /effort. Four levels: low (skip
+      thinking for simple tasks), medium (default), high (complex logic), and max
+      (deepest reasoning, Opus only). Persists across sessions except max.
+    category: "configuration"
+    tags: [effort, thinking, reasoning, performance, tokens, cost]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "complex_logic"]
+      workflow_patterns: ["cost_optimization", "deep_reasoning"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://code.claude.com/docs/en/model-config"
+      date: "2026-03-10"
+    example: |
+      # Quick tasks - skip extended thinking
+      /effort low
+
+      # Default balanced mode
+      /effort medium
+
+      # Complex debugging or architecture
+      /effort high
+
+      # Maximum reasoning depth (Opus 4.6 only)
+      /effort max
+
+      # Or set via environment variable
+      export CLAUDE_CODE_EFFORT_LEVEL=high
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "auto-mode"
+    title: "Auto Mode for Fewer Permission Prompts"
+    description: |
+      Auto mode is a safer alternative to --dangerously-skip-permissions. A Sonnet
+      4.6 safety classifier reviews each tool call and auto-approves low-risk actions
+      while blocking destructive ones (mass deletes, force pushes, production deploys).
+      Launched March 24, 2026 in research preview.
+    category: "workflow"
+    tags: [auto-mode, permissions, autonomous, safety, classifier]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "long_running_tasks"]
+      workflow_patterns: ["autonomous_development", "batch_processing"]
+    difficulty: "intermediate"
+    source:
+      author: "claudeai"
+      url: "https://claude.com/blog/auto-mode"
+      date: "2026-03-24"
+    example: |
+      # Enable auto mode in a session
+      # Claude will auto-approve safe actions and block risky ones
+
+      # Safe actions (auto-approved):
+      #   - Reading files, running tests, editing code
+      # Blocked actions (require manual approval):
+      #   - Force push, mass file deletion, production deploys
+
+      # Available for Team plans; Enterprise and API coming soon
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "computer-use-screen-control"
+    title: "Computer Use: Direct Screen Interaction"
+    description: |
+      When built-in tools aren't enough, Claude Code automatically switches to
+      Computer Use mode to interact directly with your screen. It takes screenshots,
+      analyzes what's visible, and performs mouse clicks, typing, and scrolling.
+      Available for Pro and Max users on macOS (research preview).
+    category: "integration"
+    tags: [computer-use, screen, mouse, keyboard, gui, desktop, vision]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["gui_application", "desktop_app"]
+      workflow_patterns: ["frontend_development", "gui_testing"]
+    difficulty: "advanced"
+    source:
+      author: "claudeai"
+      url: "https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork"
+      date: "2026-03-23"
+    example: |
+      # Computer Use activates automatically when needed
+      # Claude can:
+      #   - Open files in GUI editors
+      #   - Click buttons in dev tools
+      #   - Navigate browser windows
+      #   - Fill out forms
+      #   - Take and analyze screenshots
+
+      # Works via perception-action loop:
+      # 1. Takes screenshot
+      # 2. Analyzes what's on screen
+      # 3. Decides action (click, type, scroll)
+      # 4. Executes and verifies
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "bare-flag-scripted-mode"
+    title: "--bare Flag for Lightweight Scripted Calls"
+    description: |
+      Use --bare with -p for minimal overhead scripted calls. Skips hooks, LSP,
+      plugin sync, and skill directory walks. Requires ANTHROPIC_API_KEY or
+      apiKeyHelper. Disables OAuth, keychain auth, and auto-memory.
+    category: "automation"
+    tags: [bare, scripted, headless, ci, lightweight, api-key]
+    relevance_signals:
+      files: [".github/workflows/*.yml", "Makefile", "scripts/"]
+      frameworks: []
+      indicators: ["ci_cd_heavy", "scripted_usage"]
+      workflow_patterns: ["ci_cd_integration", "batch_processing"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-20"
+    example: |
+      # Minimal scripted call - no hooks, no plugins, no LSP
+      ANTHROPIC_API_KEY=sk-... claude -p --bare "Generate a summary of this file" < input.txt
+
+      # Use in CI pipelines for fast, lightweight calls
+      claude -p --bare --output-format json "List all TODO comments" > todos.json
+
+      # Combine with --settings for custom apiKeyHelper
+      claude -p --bare --settings '{"apiKeyHelper": "vault read secret/claude"}' "Review this diff"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "terminal-setup-command"
+    title: "/terminal-setup for Shift+Enter Newlines"
+    description: |
+      Run /terminal-setup to enable shift+enter for inserting newlines in your
+      terminal. Works with IDE terminals, Apple Terminal, Warp, and Alacritty.
+      Essential for writing multi-line prompts without submitting prematurely.
+    category: "configuration"
+    tags: [terminal, setup, newline, shift-enter, multiline, keybindings]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["terminal_heavy"]
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://x.com/bcherny/status/2038454347156398333"
+      date: "2026-03-10"
+    example: |
+      # Run once to configure your terminal
+      /terminal-setup
+
+      # After setup, use shift+enter for newlines:
+      # "Fix the login bug [shift+enter]
+      #  and add a test for it [enter to submit]"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "mcp-elicitation-support"
+    title: "MCP Elicitation: Servers Request Input Mid-Task"
+    description: |
+      MCP servers can now request structured input from you mid-task via
+      interactive dialogs. Supports form mode (server-defined form fields) and
+      URL mode (opens a browser for auth/approval). Includes Elicitation and
+      ElicitationResult hooks for customization. Added in v2.1.76.
+    category: "integration"
+    tags: [mcp, elicitation, interactive, input, dialog, auth, hooks]
+    relevance_signals:
+      files: [".mcp.json", ".claude/settings.json"]
+      frameworks: []
+      indicators: ["mcp_servers", "custom_tooling"]
+      workflow_patterns: ["mcp_integration", "authentication_flows"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://code.claude.com/docs/en/mcp"
+      date: "2026-03-14"
+    example: |
+      # MCP server requests input mid-task:
+      # 1. Form mode - Claude Code shows interactive dialog
+      #    Server defines fields, you fill them in
+      #
+      # 2. URL mode - Claude Code opens browser
+      #    For OAuth flows or approval pages
+      #
+      # Hook into elicitation events:
+      # - Elicitation hook: intercept before dialog shows
+      # - ElicitationResult hook: modify response before sending
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "permission-denied-hook"
+    title: "PermissionDenied Hook for Auto Mode"
+    description: |
+      A new hook type that fires when the auto mode classifier denies a tool call.
+      Lets you log, alert, or customize behavior when Claude's safety classifier
+      blocks an action. Useful for monitoring what auto mode is catching.
+    category: "automation"
+    tags: [hooks, permission, auto-mode, safety, classifier, monitoring]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["custom_tooling"]
+      workflow_patterns: ["autonomous_development", "security_monitoring"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-24"
+    example: |
+      // In .claude/settings.json
+      {
+        "hooks": {
+          "PermissionDenied": [
+            {
+              "matcher": "",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "echo \"Blocked: $CLAUDE_TOOL_NAME\" >> ~/claude-denials.log"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "no-flicker-rendering"
+    title: "Flicker-Free Rendering with CLAUDE_CODE_NO_FLICKER"
+    description: |
+      Set CLAUDE_CODE_NO_FLICKER=1 environment variable for flicker-free
+      alt-screen rendering. Eliminates visual flicker in terminals during
+      Claude Code output, especially useful for screen recordings and demos.
+    category: "configuration"
+    tags: [rendering, flicker, terminal, display, environment-variable]
+    relevance_signals:
+      files: [".zshrc", ".bashrc", ".env"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["terminal_heavy", "screen_recording"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-20"
+    example: |
+      # Add to your shell profile for persistent use
+      export CLAUDE_CODE_NO_FLICKER=1
+
+      # Or set per-session
+      CLAUDE_CODE_NO_FLICKER=1 claude
     added_date: "2026-03-31"
     last_verified: "2026-03-31"
