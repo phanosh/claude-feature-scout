@@ -1,0 +1,3841 @@
+# Claude Feature Scout - Feature Database
+# Last updated: 2026-03-31
+# Total features: 132
+#
+# Schema: see data/schema.yaml
+# Contributing: see CONTRIBUTING.md
+
+features:
+
+  # ============================================================================
+  # WORKFLOW
+  # ============================================================================
+
+  - id: "git-worktrees-parallel-sessions"
+    title: "Git Worktrees for Parallel Claude Sessions"
+    description: |
+      Use git worktrees to run multiple Claude Code sessions simultaneously on different
+      features without conflicts. Each worktree gets its own working directory and branch,
+      letting you run independent Claude agents in parallel.
+    category: "workflow"
+    tags: [git, worktrees, parallel, concurrency, branching, multi-session]
+    relevance_signals:
+      files: [".git/config", ".gitmodules"]
+      frameworks: []
+      indicators: ["large_codebase", "monorepo", "many_branches"]
+      workflow_patterns: ["feature_branches", "parallel_development"]
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Create a worktree for a new feature
+      git worktree add ../my-repo-feature-auth feature/auth
+
+      # Open Claude Code in the new worktree
+      cd ../my-repo-feature-auth && claude
+
+      # Meanwhile, keep working in the main worktree
+      # Each Claude session is fully isolated
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "planning-mode"
+    title: "Planning Mode (Plan → Review → Execute)"
+    description: |
+      Use planning mode to have Claude think through a problem before writing code.
+      Claude drafts a plan, you review and refine it, then Claude executes. This
+      dramatically improves outcomes for complex tasks.
+    category: "workflow"
+    tags: [planning, plan-mode, review, strategy, architecture]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "monorepo"]
+      workflow_patterns: ["feature_branches", "documentation_heavy"]
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # In Claude Code, use Shift+Tab to toggle plan mode
+      # Or type:
+      > Plan how to refactor the authentication module to use JWT tokens
+
+      # Claude will output a plan. Review it, then say:
+      > Execute the plan
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "verify-work-quality"
+    title: "Give Claude a Way to Verify Its Work"
+    description: |
+      Always give Claude a way to check its own output — run tests, lint, type-check,
+      or build. This produces 2-3x quality improvement compared to blind code generation.
+      Include verification commands in your CLAUDE.md or prompt.
+    category: "workflow"
+    tags: [verification, quality, testing, feedback-loop, best-practice]
+    relevance_signals:
+      files: ["package.json", "Makefile", "Cargo.toml", "pyproject.toml", "pytest.ini"]
+      frameworks: []
+      indicators: ["has_tests", "has_ci"]
+      workflow_patterns: ["tdd", "ci_cd_heavy"]
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # In CLAUDE.md, add:
+      ## Verification
+      After making changes, always run:
+      - `npm test` to run unit tests
+      - `npm run lint` to check linting
+      - `npm run typecheck` to verify types
+
+      # Or in your prompt:
+      > Implement the login form and verify it works by running the test suite
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "subagent-delegation"
+    title: "Subagent Delegation for Parallel Tasks"
+    description: |
+      Claude Code can spawn subagents to work on independent tasks in parallel.
+      This is useful for large refactors, multi-file changes, or when you need
+      to explore multiple approaches simultaneously.
+    category: "workflow"
+    tags: [subagent, parallel, delegation, concurrency, multi-task]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "monorepo"]
+      workflow_patterns: ["parallel_development"]
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      > I need to update the API endpoints, add tests, and update the docs.
+      > Use subagents to handle each task in parallel.
+
+      # Claude will dispatch parallel subagents for:
+      # 1. API endpoint changes
+      # 2. Test creation
+      # 3. Documentation updates
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "todowrite-task-tracking"
+    title: "TodoWrite for Task Tracking"
+    description: |
+      Claude Code uses the TodoWrite tool internally to track multi-step tasks.
+      When working on complex features, Claude maintains a todo list to ensure
+      nothing is missed. You can ask Claude to show its current task list.
+    category: "workflow"
+    tags: [todo, task-tracking, organization, multi-step, checklist]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: ["feature_branches", "documentation_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      > Refactor the payment module. Track your progress with a todo list.
+
+      # Claude will create and update a todo list:
+      # ✅ Identify all payment-related files
+      # ✅ Extract shared types
+      # ⬜ Update PaymentProcessor class
+      # ⬜ Update tests
+      # ⬜ Run verification
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "git-commit-workflow"
+    title: "Git Commit Workflows with Claude"
+    description: |
+      Claude Code can create well-structured git commits with meaningful messages.
+      It analyzes staged changes, drafts conventional commit messages, and can
+      handle the entire commit workflow including pre-commit hooks.
+    category: "workflow"
+    tags: [git, commit, version-control, conventional-commits]
+    relevance_signals:
+      files: [".git/config", ".gitignore", ".commitlintrc*", "commitlint.config.*"]
+      frameworks: []
+      indicators: ["has_ci", "team_project"]
+      workflow_patterns: ["conventional_commits", "trunk_based", "feature_branches"]
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Stage and commit my changes with a descriptive commit message
+
+      # Or be specific:
+      > Create a conventional commit for the auth changes.
+      > Use the format: feat(auth): description
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "pr-review-workflow"
+    title: "PR Review Workflows"
+    description: |
+      Use Claude Code to review pull requests, analyze diffs, suggest improvements,
+      and even create PRs with well-written descriptions. The /review slash command
+      provides structured code review.
+    category: "workflow"
+    tags: [pr, pull-request, review, code-review, github]
+    relevance_signals:
+      files: [".github/PULL_REQUEST_TEMPLATE.md", ".github/workflows/*"]
+      frameworks: []
+      indicators: ["has_ci", "team_project", "many_branches"]
+      workflow_patterns: ["feature_branches", "ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Review current branch's changes
+      /review
+
+      # Or ask Claude to create a PR
+      > Create a PR for this branch with a detailed description
+
+      # Review a specific PR
+      > Review PR #42 and suggest improvements
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "debugging-strategies"
+    title: "Debugging Strategies with Claude"
+    description: |
+      Use Claude Code for systematic debugging: describe the bug, have Claude
+      investigate logs and code, form hypotheses, and implement fixes. Claude
+      can read error messages, stack traces, and test failures to diagnose issues.
+    category: "workflow"
+    tags: [debugging, troubleshooting, errors, stack-trace, investigation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["has_tests"]
+      workflow_patterns: ["tdd"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > I'm getting a "TypeError: Cannot read property 'id' of undefined"
+      > in src/api/users.ts:42. Debug this issue.
+
+      # Claude will:
+      # 1. Read the file and surrounding context
+      # 2. Trace the data flow
+      # 3. Identify the root cause
+      # 4. Suggest and implement a fix
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "run-many-claudes"
+    title: "Run As Many Claudes As You Can"
+    description: |
+      Maximize throughput by running multiple Claude Code instances in parallel
+      on different tasks or features. Use terminal tabs, tmux, or separate VS Code
+      windows each with their own Claude session.
+    category: "workflow"
+    tags: [parallel, productivity, multi-instance, throughput]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "monorepo"]
+      workflow_patterns: ["parallel_development"]
+    difficulty: "intermediate"
+    source:
+      author: "amorriscode"
+      url: "https://x.com/amorriscode"
+      date: "2025-07-01"
+    example: |
+      # Terminal 1: Claude works on feature A
+      cd feature-a-worktree && claude
+
+      # Terminal 2: Claude works on feature B
+      cd feature-b-worktree && claude
+
+      # Terminal 3: Claude writes tests
+      cd main && claude "Write tests for the auth module"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "context-window-management"
+    title: "Context Window Management Techniques"
+    description: |
+      Manage Claude's context window effectively by using /compact to summarize
+      conversation history, starting fresh sessions for new tasks, and being
+      strategic about which files you ask Claude to read.
+    category: "workflow"
+    tags: [context, memory, compaction, efficiency, token-management]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # When context gets long, compact it
+      /compact
+
+      # Or compact with specific focus
+      /compact Keep only the auth refactoring context
+
+      # Start fresh for unrelated tasks
+      /clear
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "fast-mode-toggle"
+    title: "Fast Mode Toggle"
+    description: |
+      Toggle fast mode to use a faster, cheaper model (like Haiku or Sonnet) for
+      simple tasks, then switch back to the full model for complex work. This
+      saves tokens and speeds up simple operations.
+    category: "workflow"
+    tags: [fast-mode, speed, cost, model-switching, efficiency]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Toggle fast mode with Shift+Ctrl+1
+      # Or use the slash command
+      /model sonnet
+
+      # Switch back for complex tasks
+      /model opus
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # CONFIGURATION
+  # ============================================================================
+
+  - id: "claude-md-repo-level"
+    title: "CLAUDE.md at Repository Level"
+    description: |
+      Place a CLAUDE.md file at your repository root to give Claude persistent context
+      about your project: coding conventions, architecture decisions, build commands,
+      and project-specific instructions. Claude reads this automatically.
+    category: "configuration"
+    tags: [claude-md, configuration, project-context, conventions, memory]
+    relevance_signals:
+      files: ["CLAUDE.md", ".claude/CLAUDE.md"]
+      frameworks: []
+      indicators: ["has_claude_md", "team_project"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # CLAUDE.md at repo root
+      ## Project: MyApp
+      - Language: TypeScript with strict mode
+      - Framework: Next.js 14 with App Router
+      - Testing: Jest + React Testing Library
+      - Style: Tailwind CSS, no inline styles
+
+      ## Commands
+      - Build: `npm run build`
+      - Test: `npm test`
+      - Lint: `npm run lint`
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "claude-md-folder-level"
+    title: "CLAUDE.md at Folder Level"
+    description: |
+      Place CLAUDE.md files in subdirectories to give Claude context specific to
+      that part of the codebase. Claude reads the nearest CLAUDE.md when working
+      in a directory, inheriting from parent CLAUDE.md files.
+    category: "configuration"
+    tags: [claude-md, configuration, folder-context, modular]
+    relevance_signals:
+      files: ["CLAUDE.md"]
+      frameworks: []
+      indicators: ["large_codebase", "monorepo", "has_claude_md"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # src/api/CLAUDE.md
+      ## API Module
+      - All endpoints follow REST conventions
+      - Use Zod for request validation
+      - Every endpoint needs integration tests
+      - Auth middleware is required on all non-public routes
+
+      # src/frontend/CLAUDE.md
+      ## Frontend Module
+      - Use React Server Components where possible
+      - All components need Storybook stories
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "claude-md-user-level"
+    title: "CLAUDE.md at User Level (~/.claude/CLAUDE.md)"
+    description: |
+      Place a CLAUDE.md in your home directory's .claude folder to set global
+      preferences that apply across all projects. Great for personal coding style,
+      preferred tools, and universal conventions.
+    category: "configuration"
+    tags: [claude-md, configuration, global, personal-preferences]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # ~/.claude/CLAUDE.md
+      ## Global Preferences
+      - I prefer functional programming patterns
+      - Always use TypeScript strict mode
+      - Prefer named exports over default exports
+      - Use descriptive variable names, no abbreviations
+      - I use vim keybindings
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "permission-auto-allow"
+    title: "Permission Auto-Allow Patterns"
+    description: |
+      Configure Claude Code to automatically allow specific tools and commands
+      without prompting, reducing interruptions. Set per-project or globally
+      in your settings.
+    category: "configuration"
+    tags: [permissions, auto-allow, settings, trust, security]
+    relevance_signals:
+      files: [".claude/settings.json", ".claude/settings.local.json"]
+      frameworks: []
+      indicators: ["has_claude_md"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # .claude/settings.json
+      {
+        "permissions": {
+          "allow": [
+            "Bash(npm test)",
+            "Bash(npm run lint)",
+            "Bash(npm run build)",
+            "Read",
+            "Glob",
+            "Grep"
+          ]
+        }
+      }
+
+      # Or use the slash command to manage permissions
+      /permissions
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "model-flag-switching"
+    title: "Model Switching with --model Flag"
+    description: |
+      Use the --model flag to switch between Claude models. Use Sonnet for speed
+      on simple tasks and Opus for complex reasoning. You can also switch mid-session
+      with the /model slash command.
+    category: "configuration"
+    tags: [model, sonnet, opus, haiku, speed, cost]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Start with a specific model
+      claude --model sonnet
+      claude --model opus
+      claude --model haiku
+
+      # Switch mid-session
+      /model sonnet
+      /model opus
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "extended-thinking"
+    title: "Extended Thinking / Reasoning Effort Settings"
+    description: |
+      Control Claude's reasoning depth with extended thinking settings. Higher
+      reasoning effort means Claude thinks longer but produces better results
+      for complex problems. Lower effort is faster for simple tasks.
+    category: "configuration"
+    tags: [thinking, reasoning, depth, quality, performance]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Set reasoning effort via flag
+      claude --reasoning-effort high
+      claude --reasoning-effort low
+
+      # Or configure in settings
+      # Higher effort for architecture decisions
+      # Lower effort for simple edits
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "vim-mode"
+    title: "Vim Mode in Claude Code Terminal"
+    description: |
+      Enable vim keybindings in the Claude Code terminal input for efficient
+      text editing. Useful for developers who prefer vim-style navigation
+      and editing in the prompt.
+    category: "configuration"
+    tags: [vim, keybindings, terminal, editor, input]
+    relevance_signals:
+      files: [".vimrc", ".config/nvim/init.lua"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Enable vim mode in Claude Code settings
+      # Use Escape to enter normal mode
+      # Standard vim motions: h, j, k, l, w, b, etc.
+      # Use i, a, o to enter insert mode
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "allowed-tools-flag"
+    title: "Restrict Tools with --allowedTools"
+    description: |
+      Use the --allowedTools flag to restrict which tools Claude can use in a session.
+      Useful for limiting Claude to read-only operations or preventing file modifications
+      in certain contexts.
+    category: "configuration"
+    tags: [tools, permissions, restriction, safety, read-only]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Only allow read operations
+      claude --allowedTools Read,Grep,Glob,Bash
+
+      # Allow everything except file writing
+      claude --allowedTools Read,Grep,Glob,Bash,Edit
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "cost-tracking"
+    title: "Cost Tracking and Optimization"
+    description: |
+      Monitor your Claude Code usage costs with the /cost command. Track token
+      usage per session, identify expensive operations, and optimize by using
+      appropriate models for different tasks.
+    category: "configuration"
+    tags: [cost, tokens, billing, optimization, monitoring]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Check current session cost
+      /cost
+
+      # Optimize costs by:
+      # 1. Using /compact to reduce context
+      # 2. Switching to sonnet for simple tasks
+      # 3. Starting new sessions for unrelated work
+      # 4. Being specific in your prompts
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "output-format-json"
+    title: "Structured JSON Output with --output-format"
+    description: |
+      Use --output-format json to get structured JSON output from Claude Code,
+      useful for piping into other tools, scripts, or CI/CD pipelines.
+    category: "configuration"
+    tags: [json, output, structured, scripting, automation, pipeline]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["has_ci"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Get JSON output for scripting
+      claude -p "List all TODO comments in the codebase" --output-format json
+
+      # Use in a pipeline
+      claude -p "Analyze this code for security issues" --output-format json | jq '.result'
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # AUTOMATION
+  # ============================================================================
+
+  - id: "hooks-pre-tool-use"
+    title: "PreToolUse Hook"
+    description: |
+      Run custom scripts before Claude uses any tool. PreToolUse hooks can validate,
+      modify, or reject tool calls before they execute. Great for enforcing policies
+      like preventing writes to certain directories.
+    category: "automation"
+    tags: [hooks, pre-tool, validation, policy, safety]
+    relevance_signals:
+      files: [".claude/settings.json", ".claude/settings.local.json"]
+      frameworks: []
+      indicators: ["has_hooks", "team_project"]
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "PreToolUse": [
+            {
+              "matcher": "Edit",
+              "command": "python3 .claude/hooks/check-edit-allowed.py"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "hooks-post-tool-use"
+    title: "PostToolUse Hook"
+    description: |
+      Run custom scripts after Claude uses a tool. PostToolUse hooks can log actions,
+      trigger side effects, or validate results after tool execution completes.
+    category: "automation"
+    tags: [hooks, post-tool, logging, validation, side-effects]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["has_hooks", "team_project"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "PostToolUse": [
+            {
+              "matcher": "Bash",
+              "command": "python3 .claude/hooks/log-command.py"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "hooks-session-start"
+    title: "SessionStart Hook"
+    description: |
+      Run scripts when a Claude Code session begins. Use for environment setup,
+      loading context, checking prerequisites, or initializing project state.
+    category: "automation"
+    tags: [hooks, session, startup, initialization, setup]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["has_hooks"]
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "SessionStart": [
+            {
+              "command": "bash .claude/hooks/setup-env.sh"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "hooks-session-end"
+    title: "SessionEnd Hook"
+    description: |
+      Run scripts when a Claude Code session ends. Use for cleanup, generating
+      session reports, saving state, or triggering notifications.
+    category: "automation"
+    tags: [hooks, session, cleanup, teardown, notification]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["has_hooks"]
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "SessionEnd": [
+            {
+              "command": "bash .claude/hooks/session-report.sh"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "hooks-notification"
+    title: "Notification Hook"
+    description: |
+      Run scripts when Claude sends a notification (e.g., when a long task completes).
+      Use for custom notification delivery via Slack, email, or system notifications.
+    category: "automation"
+    tags: [hooks, notification, alerts, slack, completion]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["has_hooks"]
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "Notification": [
+            {
+              "command": "bash .claude/hooks/send-slack-notification.sh"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "hooks-stop"
+    title: "Stop Hook"
+    description: |
+      Run scripts when Claude stops its current task (before responding to user).
+      Use to validate final state, run checks, or ensure quality before Claude
+      presents results.
+    category: "automation"
+    tags: [hooks, stop, validation, quality-check]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["has_hooks"]
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "Stop": [
+            {
+              "command": "bash .claude/hooks/validate-output.sh"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "hooks-subagent-stop"
+    title: "SubagentStop Hook"
+    description: |
+      Run scripts when a subagent completes its task. Use for validating subagent
+      output, logging subagent activity, or coordinating multi-agent workflows.
+    category: "automation"
+    tags: [hooks, subagent, delegation, parallel, validation]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["has_hooks"]
+      workflow_patterns: ["parallel_development"]
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      // .claude/settings.json
+      {
+        "hooks": {
+          "SubagentStop": [
+            {
+              "command": "bash .claude/hooks/validate-subagent.sh"
+            }
+          ]
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "scheduled-agents"
+    title: "Scheduled Agents with /schedule"
+    description: |
+      Schedule Claude Code agents to run at specific times using cron expressions.
+      Great for automated code reviews, dependency updates, report generation,
+      and recurring maintenance tasks.
+    category: "automation"
+    tags: [schedule, cron, automation, recurring, agents]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["has_ci", "team_project"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Schedule a daily dependency check
+      /schedule "0 9 * * *" "Check for outdated dependencies and create a PR if updates are available"
+
+      # Schedule weekly code quality reports
+      /schedule "0 10 * * MON" "Generate a code quality report for the past week"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "batch-mode"
+    title: "Batch Mode for Multiple Prompts"
+    description: |
+      Run multiple prompts through Claude Code in batch mode for automated
+      workflows. Process a list of tasks without interactive input, perfect
+      for CI/CD pipelines and scripted automation.
+    category: "automation"
+    tags: [batch, automation, scripting, pipeline, non-interactive]
+    relevance_signals:
+      files: ["Makefile", ".github/workflows/*", ".gitlab-ci.yml"]
+      frameworks: []
+      indicators: ["has_ci"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Run a single prompt non-interactively
+      claude -p "Fix all lint errors in src/"
+
+      # Batch process with a script
+      for file in src/*.ts; do
+        claude -p "Add JSDoc comments to $file"
+      done
+
+      # Pipe prompts
+      echo "Explain the architecture of this project" | claude
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "non-interactive-prompt"
+    title: "Non-Interactive Prompts with -p Flag"
+    description: |
+      Use `claude -p` to run a single prompt without entering interactive mode.
+      Claude processes the prompt, outputs the result, and exits. Perfect for
+      scripting and automation.
+    category: "automation"
+    tags: [non-interactive, scripting, automation, cli, one-shot]
+    relevance_signals:
+      files: ["Makefile", "*.sh"]
+      frameworks: []
+      indicators: ["has_ci"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Quick question
+      claude -p "What does the main() function in src/index.ts do?"
+
+      # Generate code
+      claude -p "Write a Python script to parse CSV files" > parse_csv.py
+
+      # Code analysis
+      claude -p "Find potential memory leaks in src/"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "pipe-input"
+    title: "Piping Input to Claude"
+    description: |
+      Pipe text or command output into Claude Code for analysis. Great for
+      processing logs, analyzing command output, or feeding context from
+      other tools.
+    category: "automation"
+    tags: [pipe, stdin, unix, scripting, automation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Pipe command output for analysis
+      git diff | claude -p "Review these changes"
+
+      # Analyze logs
+      cat error.log | claude -p "What's causing these errors?"
+
+      # Process test results
+      npm test 2>&1 | claude -p "Explain the test failures"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "github-actions-integration"
+    title: "GitHub Actions Integration (claude-code-action)"
+    description: |
+      Use Claude Code as a GitHub Action for automated PR reviews, issue triage,
+      code generation, and more. The claude-code-action runs Claude in your
+      CI/CD pipeline with full repository access.
+    category: "automation"
+    tags: [github, actions, ci-cd, pr-review, automation]
+    relevance_signals:
+      files: [".github/workflows/*"]
+      frameworks: []
+      indicators: ["has_ci", "team_project"]
+      workflow_patterns: ["ci_cd_heavy", "feature_branches"]
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/github-actions"
+      date: "2025-06-01"
+    example: |
+      # .github/workflows/claude-review.yml
+      name: Claude Code Review
+      on:
+        pull_request:
+          types: [opened, synchronize]
+      jobs:
+        review:
+          runs-on: ubuntu-latest
+          steps:
+            - uses: anthropics/claude-code-action@v1
+              with:
+                anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+                prompt: "Review this PR for bugs, security issues, and style"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "gitlab-cicd-integration"
+    title: "GitLab CI/CD Integration"
+    description: |
+      Integrate Claude Code into GitLab CI/CD pipelines for automated code review,
+      test generation, and merge request analysis.
+    category: "automation"
+    tags: [gitlab, ci-cd, pipeline, automation, merge-request]
+    relevance_signals:
+      files: [".gitlab-ci.yml"]
+      frameworks: []
+      indicators: ["has_ci", "team_project"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/gitlab"
+      date: "2025-06-01"
+    example: |
+      # .gitlab-ci.yml
+      claude-review:
+        stage: review
+        image: node:20
+        script:
+          - npm install -g @anthropic-ai/claude-code
+          - claude -p "Review the changes in this MR" --output-format json > review.json
+        only:
+          - merge_requests
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "docker-containers"
+    title: "Running Claude in Docker Containers"
+    description: |
+      Run Claude Code inside Docker containers for sandboxed execution,
+      reproducible environments, and CI/CD integration. Provides isolation
+      and security for automated workflows.
+    category: "automation"
+    tags: [docker, containers, sandbox, isolation, security, ci-cd]
+    relevance_signals:
+      files: ["Dockerfile", "docker-compose.yml", "docker-compose.yaml", ".dockerignore"]
+      frameworks: []
+      indicators: ["uses_docker"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Dockerfile for Claude Code
+      FROM node:20
+      RUN npm install -g @anthropic-ai/claude-code
+      WORKDIR /app
+      COPY . .
+      CMD ["claude", "-p", "Run tests and fix any failures"]
+
+      # Run it
+      docker build -t claude-runner .
+      docker run -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY claude-runner
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # SKILLS
+  # ============================================================================
+
+  - id: "slash-compact"
+    title: "/compact - Summarize Conversation"
+    description: |
+      Compact the current conversation to free up context window space.
+      Claude summarizes the conversation history, keeping key context while
+      reducing token usage. Essential for long sessions.
+    category: "skills"
+    tags: [slash-command, compact, context, memory, optimization]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      /compact
+
+      # With a focus hint
+      /compact Retain context about the database migration
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-review"
+    title: "/review - Code Review"
+    description: |
+      Trigger a structured code review of current changes. Claude analyzes
+      your diff and provides feedback on bugs, style, performance, and
+      security issues.
+    category: "skills"
+    tags: [slash-command, review, code-review, quality]
+    relevance_signals:
+      files: [".git/config"]
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: ["feature_branches"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Review current branch changes
+      /review
+
+      # Claude will analyze the diff and provide structured feedback
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-cost"
+    title: "/cost - Check Session Cost"
+    description: |
+      Display the current session's token usage and estimated cost.
+      Helps you monitor spending and optimize your usage patterns.
+    category: "skills"
+    tags: [slash-command, cost, tokens, billing, monitoring]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      /cost
+      # Output: Session cost: $0.42 | Tokens: 125,000 in / 15,000 out
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-model"
+    title: "/model - Switch Model"
+    description: |
+      Switch between Claude models mid-session. Use Sonnet for speed,
+      Opus for complex reasoning, or Haiku for quick simple tasks.
+    category: "skills"
+    tags: [slash-command, model, switching, sonnet, opus, haiku]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Switch to Sonnet for quick tasks
+      /model sonnet
+
+      # Switch to Opus for complex reasoning
+      /model opus
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-permissions"
+    title: "/permissions - Manage Permissions"
+    description: |
+      View and manage tool permissions for the current session or project.
+      Control which tools Claude can use and what commands it can run.
+    category: "skills"
+    tags: [slash-command, permissions, security, tools, access-control]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # View current permissions
+      /permissions
+
+      # Claude shows allowed/denied tools and commands
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-memory"
+    title: "/memory - Manage Memory"
+    description: |
+      View and manage Claude's persistent memory (CLAUDE.md). Add or remove
+      memories that persist across sessions for the current project.
+    category: "skills"
+    tags: [slash-command, memory, persistence, context, claude-md]
+    relevance_signals:
+      files: ["CLAUDE.md"]
+      frameworks: []
+      indicators: ["has_claude_md"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # View current memories
+      /memory
+
+      # Add a memory
+      > Remember that we use pnpm instead of npm in this project
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-clear"
+    title: "/clear - Clear Conversation"
+    description: |
+      Clear the current conversation and start fresh. Useful when switching
+      to an unrelated task or when context has become cluttered.
+    category: "skills"
+    tags: [slash-command, clear, reset, fresh-start]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      /clear
+      # Conversation is cleared, CLAUDE.md context is reloaded
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-doctor"
+    title: "/doctor - Diagnose Issues"
+    description: |
+      Run diagnostics on your Claude Code installation. Checks configuration,
+      API connectivity, permissions, and common issues.
+    category: "skills"
+    tags: [slash-command, doctor, diagnostics, troubleshooting, health-check]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      /doctor
+      # Output: Checks API key, model access, tool permissions, etc.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "custom-slash-commands"
+    title: "Custom Slash Commands"
+    description: |
+      Create your own slash commands to automate repetitive workflows.
+      Define custom commands in your project's .claude directory as
+      markdown prompt files.
+    category: "skills"
+    tags: [slash-command, custom, automation, workflow, extensibility]
+    relevance_signals:
+      files: [".claude/commands/*", ".claude/commands/**/*.md"]
+      frameworks: []
+      indicators: ["has_custom_skills", "has_claude_md"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Create .claude/commands/test-and-lint.md
+      Run the test suite and fix any failures, then run the linter
+      and fix any issues. Report what you changed.
+
+      # Use it:
+      /test-and-lint
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "plugin-skill-ecosystem"
+    title: "Plugin/Skill Ecosystem"
+    description: |
+      Claude Code supports a plugin and skill ecosystem where you can install
+      and use third-party skills that extend Claude's capabilities. Skills
+      provide specialized workflows for specific tasks.
+    category: "skills"
+    tags: [plugins, skills, ecosystem, extensibility, marketplace]
+    relevance_signals:
+      files: [".claude/skills/*"]
+      frameworks: []
+      indicators: ["has_custom_skills"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Skills are loaded from .claude/skills/ directory
+      # Each skill is a markdown file with instructions
+      # Claude automatically discovers and uses available skills
+
+      # Example skill structure:
+      # .claude/skills/deploy.md
+      # .claude/skills/review-security.md
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slash-schedule"
+    title: "/schedule - Schedule Remote Agents"
+    description: |
+      Create, list, and manage scheduled agents that run on cron schedules.
+      These agents can perform recurring tasks like dependency updates,
+      code quality checks, and report generation.
+    category: "skills"
+    tags: [slash-command, schedule, cron, remote, agents, recurring]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["has_ci", "team_project"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # List scheduled agents
+      /schedule list
+
+      # Create a new schedule
+      /schedule create "0 9 * * MON" "Check for security vulnerabilities"
+
+      # Delete a schedule
+      /schedule delete <id>
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # INTEGRATION
+  # ============================================================================
+
+  - id: "vscode-extension"
+    title: "VS Code Extension"
+    description: |
+      Claude Code integrates directly into VS Code as an extension. Access
+      Claude from the sidebar, use inline suggestions, and work with Claude
+      without leaving your editor.
+    category: "integration"
+    tags: [vscode, ide, extension, editor, inline]
+    relevance_signals:
+      files: [".vscode/settings.json", ".vscode/extensions.json"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/vscode"
+      date: "2025-06-01"
+    example: |
+      # Install the extension from VS Code marketplace
+      # Search for "Claude Code" in extensions
+
+      # Use Cmd+Shift+P > "Claude Code" to access features
+      # Or open the Claude sidebar panel
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "jetbrains-plugin"
+    title: "JetBrains Plugin"
+    description: |
+      Claude Code integrates into JetBrains IDEs (IntelliJ, WebStorm, PyCharm, etc.)
+      as a plugin. Access Claude from within your JetBrains editor with native
+      IDE integration.
+    category: "integration"
+    tags: [jetbrains, intellij, webstorm, pycharm, ide, plugin]
+    relevance_signals:
+      files: [".idea/*"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/jetbrains"
+      date: "2025-06-01"
+    example: |
+      # Install from JetBrains Marketplace
+      # Settings > Plugins > Search "Claude Code"
+
+      # Access via the Claude tool window
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "desktop-app"
+    title: "Claude Code Desktop App"
+    description: |
+      Use Claude Code as a standalone desktop application with plan mode,
+      permission notifications, and a polished UI. Available for macOS,
+      Windows, and Linux.
+    category: "integration"
+    tags: [desktop, app, standalone, gui, plan-mode]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "amorriscode"
+      url: "https://x.com/amorriscode"
+      date: "2025-07-01"
+    example: |
+      # Download from claude.ai/code
+      # Open a project folder
+      # Claude has access to the full project with native OS integration
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "web-claude-ai-code"
+    title: "Web Interface (claude.ai/code)"
+    description: |
+      Access Claude Code through the web at claude.ai/code. No local installation
+      needed — use Claude Code directly in your browser with a cloud-based
+      development environment.
+    category: "integration"
+    tags: [web, browser, cloud, no-install, claude-ai]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://claude.ai/code"
+      date: "2025-06-01"
+    example: |
+      # Visit claude.ai/code in your browser
+      # Connect to a repository
+      # Start coding with Claude in the browser
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "ios-mobile"
+    title: "iOS Mobile Access"
+    description: |
+      Access Claude Code from your iPhone or iPad through the Claude iOS app.
+      Review code, make quick changes, and manage your development workflow
+      on the go.
+    category: "integration"
+    tags: [ios, mobile, iphone, ipad, on-the-go]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Download Claude app from the iOS App Store
+      # Access Claude Code features within the app
+      # Review PRs, make quick edits, check build status
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "slack-integration"
+    title: "Slack Integration"
+    description: |
+      Integrate Claude Code with Slack to trigger code tasks, receive notifications,
+      and interact with Claude from your team's Slack workspace.
+    category: "integration"
+    tags: [slack, team, chat, notifications, collaboration]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/slack"
+      date: "2025-06-01"
+    example: |
+      # In Slack, mention @Claude to:
+      # - Review a PR: "@Claude review PR #42"
+      # - Ask about code: "@Claude explain the auth module"
+      # - Trigger tasks: "@Claude run tests on main branch"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "chrome-extension"
+    title: "Chrome Extension (Claude in Chrome)"
+    description: |
+      Use Claude Code directly in Chrome to interact with web pages,
+      fill forms, navigate sites, and automate browser tasks. Claude
+      can see and interact with web content.
+    category: "integration"
+    tags: [chrome, browser, extension, web, automation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Install "Claude in Chrome" extension
+      # Claude can:
+      # - Read page content
+      # - Fill forms
+      # - Navigate between pages
+      # - Take screenshots
+      # - Execute JavaScript
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "mcp-server-integration"
+    title: "MCP Server Integration"
+    description: |
+      Connect Claude Code to Model Context Protocol (MCP) servers for
+      extended capabilities. MCP servers provide tools like database access,
+      API integrations, and custom functionality.
+    category: "integration"
+    tags: [mcp, model-context-protocol, tools, extensibility, servers]
+    relevance_signals:
+      files: [".claude/mcp.json", "mcp.json"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/mcp"
+      date: "2025-06-01"
+    example: |
+      # .claude/mcp.json
+      {
+        "servers": {
+          "my-database": {
+            "command": "npx",
+            "args": ["@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]
+          },
+          "github": {
+            "command": "npx",
+            "args": ["@modelcontextprotocol/server-github"]
+          }
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "lsp-integration"
+    title: "LSP Integration"
+    description: |
+      Claude Code integrates with Language Server Protocol (LSP) for enhanced
+      code intelligence. Get real-time type information, go-to-definition,
+      and diagnostics that Claude can use for better code understanding.
+    category: "integration"
+    tags: [lsp, language-server, code-intelligence, types, diagnostics]
+    relevance_signals:
+      files: ["tsconfig.json", "pyrightconfig.json", "compile_commands.json"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # LSP integration is automatic when using VS Code or JetBrains
+      # Claude can use LSP data for:
+      # - Type information
+      # - Symbol resolution
+      # - Diagnostics and errors
+      # - Go-to-definition paths
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "agent-sdk"
+    title: "Agent SDK"
+    description: |
+      Build custom applications powered by Claude Code using the Agent SDK.
+      Create automated workflows, custom tools, and programmatic access
+      to Claude's coding capabilities.
+    category: "integration"
+    tags: [sdk, agent, api, programmatic, custom-tools, development]
+    relevance_signals:
+      files: ["package.json", "pyproject.toml"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/agent-sdk"
+      date: "2025-06-01"
+    example: |
+      import { Agent } from '@anthropic-ai/claude-code';
+
+      const agent = new Agent({
+        model: 'claude-sonnet-4-20250514',
+        workingDirectory: '/path/to/project',
+      });
+
+      const result = await agent.run('Fix all TypeScript errors');
+      console.log(result);
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # CODING
+  # ============================================================================
+
+  - id: "multi-file-context"
+    title: "Multi-File Context with Read Tool"
+    description: |
+      Claude Code can read multiple files to build comprehensive understanding
+      of your codebase. Reference multiple files in your prompts, and Claude
+      will read and analyze them together.
+    category: "coding"
+    tags: [read, multi-file, context, analysis, codebase]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Read src/api/users.ts, src/types/user.ts, and src/db/user-model.ts
+      > then refactor the User type to include email verification status
+
+      # Claude reads all three files and makes coordinated changes
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "code-review-analysis"
+    title: "Using Claude for Code Review"
+    description: |
+      Have Claude review your code for bugs, security issues, performance
+      problems, and style consistency. Claude can analyze diffs, individual
+      files, or entire modules.
+    category: "coding"
+    tags: [code-review, quality, bugs, security, performance, style]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: ["feature_branches"]
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Review src/auth/login.ts for security vulnerabilities
+
+      > Review my changes before I commit:
+      > git diff --staged
+
+      > Do a thorough code review of the payment processing module
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "test-generation"
+    title: "Automated Test Generation"
+    description: |
+      Have Claude generate comprehensive tests for your code. Claude can create
+      unit tests, integration tests, and edge case tests based on your existing
+      code and testing patterns.
+    category: "coding"
+    tags: [testing, test-generation, unit-tests, integration-tests, tdd]
+    relevance_signals:
+      files: ["jest.config.*", "vitest.config.*", "pytest.ini", "pyproject.toml", "*.test.*", "*.spec.*"]
+      frameworks: ["jest", "vitest", "pytest", "mocha"]
+      indicators: ["has_tests"]
+      workflow_patterns: ["tdd"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Write comprehensive tests for src/utils/validators.ts
+      > Include edge cases and error scenarios
+
+      > Generate integration tests for the /api/users endpoint
+      > Follow the existing test patterns in __tests__/
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "refactoring-assistance"
+    title: "Refactoring Assistance"
+    description: |
+      Use Claude to refactor code with confidence. Claude can extract functions,
+      rename variables, restructure modules, and modernize code while maintaining
+      behavior. Ask Claude to verify with tests.
+    category: "coding"
+    tags: [refactoring, modernization, clean-code, restructure]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "has_tests"]
+      workflow_patterns: ["tdd"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Refactor src/services/payment.ts to use the Strategy pattern
+      > for different payment providers. Run tests after each change.
+
+      > Extract the validation logic from UserController into a
+      > separate ValidationService class
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "type-safe-migrations"
+    title: "Type-Safe Code Migrations"
+    description: |
+      Use Claude to migrate code between frameworks, languages, or API versions
+      while maintaining type safety. Claude can handle large-scale migrations
+      across multiple files.
+    category: "coding"
+    tags: [migration, types, framework, upgrade, conversion]
+    relevance_signals:
+      files: ["tsconfig.json", "package.json", "pyproject.toml"]
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Migrate all React class components to functional components
+      > with hooks. Maintain all existing tests.
+
+      > Upgrade our Next.js pages from Pages Router to App Router
+      > Handle all routing changes and data fetching updates
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "documentation-generation"
+    title: "Documentation Generation"
+    description: |
+      Have Claude generate documentation for your code: JSDoc comments,
+      docstrings, README sections, API documentation, and architectural
+      decision records.
+    category: "coding"
+    tags: [documentation, jsdoc, docstrings, readme, api-docs]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["documentation_heavy"]
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Add JSDoc comments to all exported functions in src/utils/
+
+      > Generate API documentation for the REST endpoints in src/api/
+
+      > Write a comprehensive README for this project
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "haiku-quick-questions"
+    title: "Haiku for Quick Questions"
+    description: |
+      Use Claude Haiku for quick, simple questions that don't need deep reasoning.
+      Haiku is faster and cheaper, perfect for syntax lookups, simple explanations,
+      and quick code snippets.
+    category: "coding"
+    tags: [haiku, quick, speed, cheap, simple]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Switch to Haiku for quick questions
+      /model haiku
+
+      > What's the syntax for a TypeScript discriminated union?
+      > How do I destructure nested objects in JavaScript?
+
+      # Switch back for complex work
+      /model opus
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "codebase-exploration"
+    title: "Codebase Exploration and Understanding"
+    description: |
+      Ask Claude to explore and explain unfamiliar codebases. Claude can trace
+      execution paths, explain architecture, map dependencies, and create
+      mental models of how code works.
+    category: "coding"
+    tags: [exploration, understanding, architecture, onboarding, learning]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Explain the architecture of this project. What are the main
+      > modules and how do they interact?
+
+      > Trace the request flow from the API endpoint /api/checkout
+      > through to the database
+
+      > What design patterns are used in this codebase?
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "error-explanation"
+    title: "Error Explanation and Resolution"
+    description: |
+      Paste error messages, stack traces, or build failures and have Claude
+      explain the root cause and suggest fixes. Claude can read relevant
+      source files to provide contextual solutions.
+    category: "coding"
+    tags: [errors, stack-trace, debugging, troubleshooting, build-failures]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > I'm getting this error:
+      > TypeError: Cannot read properties of undefined (reading 'map')
+      >   at UserList (src/components/UserList.tsx:15:23)
+      > Fix it.
+
+      # Claude reads the file, understands the context, and fixes the issue
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "dependency-management"
+    title: "Dependency Management"
+    description: |
+      Have Claude analyze your dependencies for security vulnerabilities,
+      outdated versions, unused packages, and compatibility issues. Claude
+      can also help with dependency upgrades.
+    category: "coding"
+    tags: [dependencies, packages, security, outdated, npm, pip, cargo]
+    relevance_signals:
+      files: ["package.json", "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "requirements.txt", "Pipfile", "Cargo.toml", "go.mod"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Check for outdated dependencies and suggest safe upgrades
+
+      > Are there any known security vulnerabilities in our dependencies?
+
+      > Remove unused dependencies from package.json
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "performance-optimization"
+    title: "Performance Optimization"
+    description: |
+      Have Claude analyze code for performance bottlenecks and suggest
+      optimizations. Claude can identify N+1 queries, unnecessary re-renders,
+      memory leaks, and algorithmic inefficiencies.
+    category: "coding"
+    tags: [performance, optimization, bottleneck, profiling, efficiency]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Analyze src/api/products.ts for performance issues
+      > Look for N+1 queries and unnecessary database calls
+
+      > Profile the React component tree in src/pages/Dashboard.tsx
+      > Identify unnecessary re-renders
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "security-audit"
+    title: "Security Audit"
+    description: |
+      Have Claude perform security audits on your code. Claude can identify
+      SQL injection, XSS vulnerabilities, insecure authentication patterns,
+      exposed secrets, and other security issues.
+    category: "coding"
+    tags: [security, audit, vulnerabilities, injection, xss, authentication]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Perform a security audit on the authentication module
+      > Check for: SQL injection, XSS, CSRF, insecure tokens
+
+      > Scan the codebase for hardcoded secrets and credentials
+
+      > Review the API endpoints for authorization bypass vulnerabilities
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # NAVIGATION
+  # ============================================================================
+
+  - id: "glob-file-search"
+    title: "Fast File Search with Glob"
+    description: |
+      Claude uses the Glob tool for lightning-fast file pattern matching.
+      Find files by name, extension, or path pattern across any size codebase.
+    category: "navigation"
+    tags: [glob, file-search, pattern-matching, find]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "monorepo"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Find all TypeScript test files
+      # Claude uses: Glob("**/*.test.ts")
+
+      > Find all configuration files
+      # Claude uses: Glob("**/*.config.*")
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "grep-content-search"
+    title: "Content Search with Grep"
+    description: |
+      Claude uses the Grep tool (powered by ripgrep) for fast content search
+      across files. Search for patterns, function definitions, imports, and
+      any text content in your codebase.
+    category: "navigation"
+    tags: [grep, search, content, regex, ripgrep]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Find all usages of the deprecated getUserById function
+      # Claude uses: Grep("getUserById")
+
+      > Find all TODO comments in the codebase
+      # Claude uses: Grep("TODO|FIXME|HACK")
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "codebase-graph"
+    title: "Codebase Dependency Graph"
+    description: |
+      Ask Claude to map out the dependency graph of your codebase. Claude
+      can trace imports, identify circular dependencies, and visualize
+      module relationships.
+    category: "navigation"
+    tags: [dependency-graph, imports, architecture, modules, circular]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "monorepo"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Map the dependency graph of src/services/
+      > Identify any circular dependencies
+
+      > What modules depend on src/core/database.ts?
+      > Show me the full dependency chain
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "symbol-search"
+    title: "Symbol and Definition Search"
+    description: |
+      Ask Claude to find specific symbols: function definitions, class
+      declarations, type definitions, and variable declarations across
+      your codebase.
+    category: "navigation"
+    tags: [symbols, definitions, functions, classes, types, search]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Where is the PaymentProcessor class defined?
+
+      > Find all interfaces that extend BaseEntity
+
+      > Show me the definition of the handleWebhook function
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # REMOTE
+  # ============================================================================
+
+  - id: "ssh-tailscale-mobile"
+    title: "Mobile Access via SSH + Tailscale"
+    description: |
+      Access Claude Code from your phone by SSHing into your dev machine
+      via Tailscale. Run Claude Code remotely from anywhere with a secure
+      encrypted connection.
+    category: "remote"
+    tags: [ssh, tailscale, mobile, remote, vpn, on-the-go]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # 1. Install Tailscale on your dev machine and phone
+      # 2. SSH from your phone's terminal app:
+      ssh user@your-machine.tailnet-name.ts.net
+
+      # 3. Run Claude Code in the remote session
+      cd /path/to/project && claude
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "ssh-support"
+    title: "SSH Support"
+    description: |
+      Claude Code works over SSH connections, allowing you to use it on
+      remote servers, cloud instances, and headless machines. Full
+      functionality is available in SSH sessions.
+    category: "remote"
+    tags: [ssh, remote, server, cloud, headless]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "amorriscode"
+      url: "https://x.com/amorriscode"
+      date: "2025-07-01"
+    example: |
+      # SSH into your remote machine
+      ssh user@remote-server
+
+      # Run Claude Code normally
+      cd /var/www/myapp && claude
+
+      # Works with tmux/screen for persistent sessions
+      tmux new -s claude-session
+      claude
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "remote-control"
+    title: "Remote Control Feature"
+    description: |
+      Control Claude Code sessions remotely. Start a Claude session on one
+      machine and control it from another device via the Remote Control API.
+    category: "remote"
+    tags: [remote-control, api, remote-access, multi-device]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Start Claude Code with remote control enabled
+      claude --remote
+
+      # Connect from another device using the provided URL/code
+      # Control the session through the web interface
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "channels"
+    title: "Channels for Multi-Session Communication"
+    description: |
+      Use Channels to enable communication between multiple Claude Code
+      sessions. Share context, coordinate tasks, and build multi-agent
+      workflows across sessions.
+    category: "remote"
+    tags: [channels, multi-session, communication, coordination, agents]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["parallel_development"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Channels enable inter-session communication
+      # Session A can send messages to Session B
+      # Useful for coordinating parallel work
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "teleport"
+    title: "Teleport for Session Transfer"
+    description: |
+      Transfer a Claude Code session from one environment to another using
+      Teleport. Move from terminal to desktop app, or from one machine
+      to another, without losing context.
+    category: "remote"
+    tags: [teleport, session-transfer, migration, context-preservation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Transfer your current session to another device
+      # The full conversation context moves with you
+      # No need to re-explain what you're working on
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "dispatch-remote-control"
+    title: "Dispatch Remote Control"
+    description: |
+      Use Dispatch to remotely trigger and manage Claude Code sessions
+      from external systems, APIs, or other tools. Enables programmatic
+      control of Claude workflows.
+    category: "remote"
+    tags: [dispatch, remote, api, programmatic, trigger]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "amorriscode"
+      url: "https://x.com/amorriscode"
+      date: "2025-07-01"
+    example: |
+      # Dispatch allows external systems to trigger Claude sessions
+      # Useful for:
+      # - CI/CD triggered code fixes
+      # - Webhook-driven code generation
+      # - API-triggered maintenance tasks
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # MEMORY
+  # ============================================================================
+
+  - id: "memory-dream-system"
+    title: "Memory/Dream System"
+    description: |
+      Claude Code's memory system lets it learn from past sessions. Claude can
+      remember project patterns, your preferences, and past decisions. The
+      "dream" system consolidates memories during idle time.
+    category: "memory"
+    tags: [memory, dream, learning, persistence, preferences]
+    relevance_signals:
+      files: ["CLAUDE.md"]
+      frameworks: []
+      indicators: ["has_claude_md"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Claude stores memories in CLAUDE.md
+      # You can manage memories with:
+      /memory
+
+      # Or ask Claude to remember something:
+      > Remember that we use pnpm, not npm, in this project
+      > Remember that API responses should always use snake_case
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "context-compaction"
+    title: "Context Compaction Strategies"
+    description: |
+      Use context compaction to keep long sessions productive. The /compact
+      command summarizes conversation history to free up context window space
+      while retaining important information.
+    category: "memory"
+    tags: [compaction, context, optimization, summarization, long-session]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Basic compaction
+      /compact
+
+      # Focused compaction - keep specific context
+      /compact Keep the database schema changes and migration plan
+
+      # Strategy: compact before starting a new sub-task
+      # in a long session to maximize available context
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "project-memory-persistence"
+    title: "Project Memory Persistence"
+    description: |
+      CLAUDE.md serves as persistent project memory across sessions. Store
+      coding conventions, architecture decisions, common commands, and
+      project-specific context that Claude reads automatically.
+    category: "memory"
+    tags: [memory, persistence, claude-md, project, conventions]
+    relevance_signals:
+      files: ["CLAUDE.md"]
+      frameworks: []
+      indicators: ["has_claude_md"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # CLAUDE.md persists across sessions
+      # Add important project context:
+
+      ## Architecture Decisions
+      - We chose PostgreSQL over MongoDB for ACID compliance
+      - API uses GraphQL, not REST
+      - Authentication via Clerk, not custom auth
+
+      ## Common Gotchas
+      - The `users` table has soft deletes - always filter by deleted_at IS NULL
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "team-shared-memory"
+    title: "Team Shared Memory via CLAUDE.md"
+    description: |
+      Share project context across your team by committing CLAUDE.md to version
+      control. Every team member's Claude sessions benefit from shared
+      conventions, commands, and architectural knowledge.
+    category: "memory"
+    tags: [team, shared, collaboration, conventions, version-control]
+    relevance_signals:
+      files: ["CLAUDE.md"]
+      frameworks: []
+      indicators: ["team_project", "has_claude_md"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Commit CLAUDE.md to your repo
+      git add CLAUDE.md
+      git commit -m "Add Claude Code project context"
+
+      # Now every team member's Claude session reads:
+      # - Project conventions
+      # - Build/test commands
+      # - Architecture context
+      # - Common patterns
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # PERFORMANCE
+  # ============================================================================
+
+  - id: "voice-input"
+    title: "Voice Input"
+    description: |
+      Use voice input to dictate prompts to Claude Code instead of typing.
+      Useful for longer descriptions, brainstorming sessions, and when
+      your hands are busy.
+    category: "performance"
+    tags: [voice, input, dictation, accessibility, hands-free]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "bcherny"
+      url: "https://howborisusesclaudecode.com"
+      date: "2025-07-01"
+    example: |
+      # Enable voice input in Claude Code settings
+      # Click the microphone icon or use the keyboard shortcut
+      # Speak your prompt naturally
+      # Claude transcribes and processes your request
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "keyboard-shortcuts"
+    title: "Essential Keyboard Shortcuts"
+    description: |
+      Master Claude Code keyboard shortcuts for maximum efficiency: Shift+Tab
+      for plan mode, Escape to cancel, Shift+Ctrl+1 for fast mode, and more.
+    category: "performance"
+    tags: [keyboard, shortcuts, efficiency, speed, keybindings]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Essential shortcuts:
+      # Shift+Tab  - Toggle plan mode
+      # Escape     - Cancel current operation
+      # Ctrl+C     - Interrupt Claude
+      # Shift+Ctrl+1 - Toggle fast mode
+      # Up arrow   - Previous prompt
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "prompt-engineering-tips"
+    title: "Effective Prompt Engineering for Claude Code"
+    description: |
+      Write better prompts to get better results. Be specific about what you
+      want, provide context, specify the desired output format, and include
+      constraints. Claude responds better to clear, structured prompts.
+    category: "performance"
+    tags: [prompts, prompt-engineering, effectiveness, communication]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Bad prompt:
+      > Fix the bug
+
+      # Good prompt:
+      > Fix the TypeError in src/api/users.ts:42.
+      > The error occurs when `user` is undefined.
+      > Keep the existing error handling pattern.
+      > Run tests after fixing.
+
+      # Great prompt:
+      > Refactor src/services/payment.ts:
+      > 1. Extract the Stripe logic into a StripeProvider class
+      > 2. Create a PaymentProvider interface
+      > 3. Update all callers to use the interface
+      > 4. Add unit tests for the new classes
+      > 5. Run `npm test` to verify everything passes
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "incremental-development"
+    title: "Incremental Development with Claude"
+    description: |
+      Break large tasks into small, verifiable steps. Have Claude implement
+      one piece at a time, verify it works, then move to the next. This
+      produces much better results than asking for everything at once.
+    category: "performance"
+    tags: [incremental, step-by-step, verification, quality, best-practice]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase"]
+      workflow_patterns: ["tdd"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Instead of: "Build me a full auth system"
+      # Do:
+      > Step 1: Create the User model and migration
+      > Step 2: Add the registration endpoint with validation
+      > Step 3: Add the login endpoint with JWT
+      > Step 4: Add middleware for protected routes
+      > Step 5: Add password reset flow
+      # Verify each step before moving on
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "session-management"
+    title: "Session Management Best Practices"
+    description: |
+      Manage Claude Code sessions effectively: start fresh for new tasks,
+      compact when context is long, use /clear when switching contexts,
+      and save important context to CLAUDE.md.
+    category: "performance"
+    tags: [session, management, context, efficiency, best-practice]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Start a new session for each major task
+      # Within a session:
+      # 1. Start with a clear goal
+      # 2. Use /compact when context gets long
+      # 3. Use /clear when switching to unrelated work
+      # 4. Save learnings to CLAUDE.md: /memory
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "parallel-task-execution"
+    title: "Parallel Task Execution"
+    description: |
+      Run multiple independent tasks in parallel using subagents, worktrees,
+      or multiple Claude sessions. This dramatically speeds up large-scale
+      changes and multi-file updates.
+    category: "performance"
+    tags: [parallel, concurrency, speed, subagents, multi-task]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "monorepo"]
+      workflow_patterns: ["parallel_development"]
+    difficulty: "advanced"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > I need to add error handling to all API endpoints.
+      > Use parallel subagents to handle each endpoint file independently.
+
+      # Claude spawns subagents for each file
+      # Each subagent works independently
+      # Results are coordinated back together
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # ADDITIONAL WORKFLOW TIPS
+  # ============================================================================
+
+  - id: "tdd-workflow"
+    title: "Test-Driven Development with Claude"
+    description: |
+      Use Claude for TDD: write failing tests first, then have Claude implement
+      the code to make them pass. This produces reliable, well-tested code and
+      gives Claude clear success criteria.
+    category: "workflow"
+    tags: [tdd, testing, test-driven, quality, methodology]
+    relevance_signals:
+      files: ["jest.config.*", "vitest.config.*", "pytest.ini", "*.test.*", "*.spec.*"]
+      frameworks: ["jest", "vitest", "pytest"]
+      indicators: ["has_tests"]
+      workflow_patterns: ["tdd"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Write a failing test for the email validation function.
+      > It should handle: valid emails, missing @, missing domain,
+      > unicode characters, and max length.
+
+      # After tests are written:
+      > Now implement the validateEmail function to make all tests pass.
+      > Run the tests to verify.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "monorepo-navigation"
+    title: "Monorepo Navigation"
+    description: |
+      Claude Code excels at navigating monorepos. Use folder-level CLAUDE.md
+      files, specify package names in prompts, and leverage Claude's ability
+      to search across the entire repo structure.
+    category: "workflow"
+    tags: [monorepo, navigation, packages, workspaces, multi-package]
+    relevance_signals:
+      files: ["pnpm-workspace.yaml", "lerna.json", "nx.json", "turbo.json", "packages/**/package.json"]
+      frameworks: ["nx", "turborepo", "lerna"]
+      indicators: ["monorepo"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > In the @myorg/api package, add a new /health endpoint
+
+      > Find all packages that depend on @myorg/shared-types
+
+      > Update the User type in @myorg/shared-types and fix all
+      > downstream packages that use it
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "ci-cd-debugging"
+    title: "CI/CD Pipeline Debugging"
+    description: |
+      Use Claude to debug CI/CD pipeline failures. Share build logs, workflow
+      files, and error output. Claude can identify configuration issues,
+      missing dependencies, and environment problems.
+    category: "workflow"
+    tags: [ci-cd, pipeline, debugging, github-actions, gitlab-ci]
+    relevance_signals:
+      files: [".github/workflows/*", ".gitlab-ci.yml", "Jenkinsfile", ".circleci/config.yml"]
+      frameworks: []
+      indicators: ["has_ci"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > My GitHub Actions workflow is failing. Here's the error:
+      > [paste error output]
+      > Fix the workflow file.
+
+      > The CI build passes locally but fails in GitHub Actions.
+      > Compare my local setup with the workflow configuration.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "database-migration-workflow"
+    title: "Database Migration Workflow"
+    description: |
+      Have Claude generate database migrations, update models, and modify
+      queries in a coordinated workflow. Claude can ensure migrations are
+      safe, reversible, and consistent with the ORM.
+    category: "workflow"
+    tags: [database, migration, orm, schema, sql]
+    relevance_signals:
+      files: ["prisma/schema.prisma", "drizzle.config.*", "knexfile.*", "alembic.ini", "migrations/*"]
+      frameworks: ["prisma", "drizzle", "knex", "typeorm", "sequelize", "django", "alembic"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Add a `verified_at` column to the users table.
+      > 1. Create the migration
+      > 2. Update the Prisma schema
+      > 3. Update the User type
+      > 4. Update all queries that need the new field
+      > 5. Generate and run the migration
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "api-endpoint-generation"
+    title: "API Endpoint Generation"
+    description: |
+      Have Claude generate complete API endpoints with validation, error
+      handling, authentication, tests, and documentation. Specify your
+      patterns and Claude follows them consistently.
+    category: "workflow"
+    tags: [api, endpoints, rest, graphql, generation, crud]
+    relevance_signals:
+      files: ["src/api/*", "src/routes/*", "app/api/*"]
+      frameworks: ["express", "fastify", "nextjs", "django", "flask", "fastapi"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a CRUD API for the Product resource.
+      > Follow the pattern in src/api/users.ts.
+      > Include: validation with Zod, error handling, auth middleware,
+      > and integration tests.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "component-generation"
+    title: "UI Component Generation"
+    description: |
+      Have Claude generate UI components following your project's design system
+      and patterns. Claude can create React, Vue, Svelte, or other framework
+      components with proper typing, styling, and tests.
+    category: "workflow"
+    tags: [components, ui, react, vue, svelte, frontend, design-system]
+    relevance_signals:
+      files: ["src/components/*", "app/components/*"]
+      frameworks: ["react", "nextjs", "vue", "nuxt", "svelte", "angular"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a DataTable component that:
+      > - Accepts typed column definitions
+      > - Supports sorting, filtering, and pagination
+      > - Follows our existing component patterns
+      > - Uses Tailwind CSS
+      > - Include Storybook stories and unit tests
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # ADDITIONAL CONFIGURATION TIPS
+  # ============================================================================
+
+  - id: "settings-json-project"
+    title: "Project Settings (.claude/settings.json)"
+    description: |
+      Configure project-level settings in .claude/settings.json. Set permissions,
+      hooks, tool restrictions, and preferences that apply to everyone working
+      on the project.
+    category: "configuration"
+    tags: [settings, project, configuration, team, shared]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      // .claude/settings.json
+      {
+        "permissions": {
+          "allow": ["Bash(npm test)", "Bash(npm run lint)", "Read"],
+          "deny": ["Bash(rm -rf *)"]
+        },
+        "hooks": {
+          "PreToolUse": [],
+          "PostToolUse": []
+        }
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "settings-local"
+    title: "Local Settings (.claude/settings.local.json)"
+    description: |
+      Use .claude/settings.local.json for personal settings that shouldn't
+      be committed to version control. Override project settings with your
+      own preferences.
+    category: "configuration"
+    tags: [settings, local, personal, gitignore, override]
+    relevance_signals:
+      files: [".claude/settings.local.json"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      // .claude/settings.local.json (gitignored)
+      {
+        "permissions": {
+          "allow": [
+            "Bash(docker compose up)",
+            "Bash(kubectl apply *)"
+          ]
+        }
+      }
+
+      # Add to .gitignore:
+      .claude/settings.local.json
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # ADDITIONAL INTEGRATION TIPS
+  # ============================================================================
+
+  - id: "tmux-persistent-sessions"
+    title: "Persistent Sessions with tmux/screen"
+    description: |
+      Use tmux or screen for persistent Claude Code sessions that survive
+      SSH disconnections. Essential for long-running tasks and remote work.
+    category: "integration"
+    tags: [tmux, screen, persistent, ssh, remote, long-running]
+    relevance_signals:
+      files: [".tmux.conf"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Create a named tmux session
+      tmux new -s claude-work
+
+      # Run Claude Code
+      claude
+
+      # Detach: Ctrl+B then D
+      # Reattach from anywhere:
+      tmux attach -t claude-work
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "git-integration"
+    title: "Native Git Integration"
+    description: |
+      Claude Code has deep git integration: it can read diffs, create commits,
+      manage branches, resolve merge conflicts, cherry-pick changes, and
+      interact with GitHub/GitLab APIs.
+    category: "integration"
+    tags: [git, version-control, diff, branch, merge, commit]
+    relevance_signals:
+      files: [".git/config"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: ["feature_branches", "trunk_based", "conventional_commits"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a new branch for the login feature
+      > Commit my changes with a descriptive message
+      > Show me the diff between main and this branch
+      > Resolve the merge conflict in src/utils.ts
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # ADDITIONAL CODING TIPS
+  # ============================================================================
+
+  - id: "regex-generation"
+    title: "Regex Generation and Explanation"
+    description: |
+      Have Claude generate, explain, and test regular expressions. Claude
+      can create complex regex patterns, explain existing ones, and
+      suggest improvements.
+    category: "coding"
+    tags: [regex, regular-expressions, patterns, parsing, validation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Write a regex to validate email addresses that handles:
+      > - Standard emails (user@domain.com)
+      > - Subdomains (user@sub.domain.com)
+      > - Plus addressing (user+tag@domain.com)
+      > Explain each part of the regex
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "sql-generation"
+    title: "SQL Query Generation and Optimization"
+    description: |
+      Have Claude generate, optimize, and explain SQL queries. Claude understands
+      complex joins, window functions, CTEs, and can optimize slow queries
+      by analyzing execution plans.
+    category: "coding"
+    tags: [sql, database, query, optimization, postgres, mysql]
+    relevance_signals:
+      files: ["*.sql", "prisma/schema.prisma", "drizzle.config.*"]
+      frameworks: ["prisma", "drizzle", "typeorm", "sequelize", "django"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Write a SQL query to find users who made more than 3 purchases
+      > in the last 30 days, ordered by total spend.
+      > Use a CTE for clarity. Optimize for PostgreSQL.
+
+      > This query is slow. Suggest indexes and optimizations:
+      > [paste SQL query]
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "dockerfile-generation"
+    title: "Dockerfile and Container Configuration"
+    description: |
+      Have Claude generate optimized Dockerfiles, docker-compose configurations,
+      and container setups. Claude follows best practices for layer caching,
+      multi-stage builds, and security.
+    category: "coding"
+    tags: [docker, dockerfile, container, compose, devops]
+    relevance_signals:
+      files: ["Dockerfile", "docker-compose.yml", "docker-compose.yaml", ".dockerignore"]
+      frameworks: []
+      indicators: ["uses_docker"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a multi-stage Dockerfile for our Node.js app.
+      > Optimize for layer caching, use non-root user,
+      > and minimize the final image size.
+
+      > Create a docker-compose.yml for local development with
+      > the app, PostgreSQL, and Redis.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "config-file-generation"
+    title: "Configuration File Generation"
+    description: |
+      Have Claude generate configuration files for tools like ESLint, Prettier,
+      TypeScript, Webpack, Vite, and more. Claude knows best practices and
+      can match your project's needs.
+    category: "coding"
+    tags: [config, eslint, prettier, typescript, webpack, vite, tooling]
+    relevance_signals:
+      files: ["package.json", "tsconfig.json", ".eslintrc*", ".prettierrc*", "vite.config.*", "webpack.config.*"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Set up ESLint and Prettier for this TypeScript project.
+      > Use the recommended rules for React/Next.js.
+      > Make them compatible with each other.
+
+      > Create a tsconfig.json with strict mode and path aliases
+      > for the src/ directory.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "accessibility-audit"
+    title: "Accessibility (a11y) Audit"
+    description: |
+      Have Claude audit your frontend code for accessibility issues. Claude
+      checks for proper ARIA labels, keyboard navigation, color contrast,
+      semantic HTML, and screen reader compatibility.
+    category: "coding"
+    tags: [accessibility, a11y, aria, wcag, semantic-html, screen-reader]
+    relevance_signals:
+      files: ["src/components/*", "app/components/*", "*.tsx", "*.jsx"]
+      frameworks: ["react", "nextjs", "vue", "angular", "svelte"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Audit src/components/ for accessibility issues.
+      > Check WCAG 2.1 AA compliance.
+      > Fix any issues you find.
+
+      > Make the navigation component keyboard-accessible
+      > and add proper ARIA labels.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "internationalization"
+    title: "Internationalization (i18n) Setup"
+    description: |
+      Have Claude set up or improve internationalization in your app.
+      Claude can extract strings, set up i18n libraries, create translation
+      files, and handle pluralization rules.
+    category: "coding"
+    tags: [i18n, internationalization, localization, translation, l10n]
+    relevance_signals:
+      files: ["src/i18n/*", "locales/*", "messages/*", "translations/*"]
+      frameworks: ["react-intl", "next-intl", "i18next", "vue-i18n"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Set up next-intl for our Next.js app.
+      > Extract all hardcoded strings from src/components/.
+      > Create English and Spanish translation files.
+
+      > Add proper pluralization rules for the item count display.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  # ============================================================================
+  # ADDITIONAL ADVANCED TIPS
+  # ============================================================================
+
+  - id: "merge-conflict-resolution"
+    title: "Merge Conflict Resolution"
+    description: |
+      Have Claude resolve git merge conflicts intelligently. Claude understands
+      both sides of a conflict and can make informed decisions about the
+      correct resolution based on code context.
+    category: "workflow"
+    tags: [git, merge, conflict, resolution, version-control]
+    relevance_signals:
+      files: [".git/config"]
+      frameworks: []
+      indicators: ["team_project", "many_branches"]
+      workflow_patterns: ["feature_branches"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > I have merge conflicts after rebasing on main.
+      > Resolve them, keeping the intent of both changes.
+
+      # Claude reads the conflict markers, understands both sides,
+      # and produces a correct resolution
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "environment-variable-management"
+    title: "Environment Variable Management"
+    description: |
+      Have Claude help manage environment variables: create .env.example files,
+      validate env vars at startup, and set up type-safe environment access.
+      Claude will never expose actual secret values.
+    category: "coding"
+    tags: [environment, env, secrets, configuration, dotenv]
+    relevance_signals:
+      files: [".env", ".env.example", ".env.local", ".env.development"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a .env.example with all required environment variables
+      > (without actual values)
+
+      > Set up type-safe environment variable access using Zod
+      > Validate all env vars at application startup
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "error-handling-patterns"
+    title: "Error Handling Pattern Generation"
+    description: |
+      Have Claude implement consistent error handling patterns across your
+      codebase. Claude can create custom error classes, error boundaries,
+      and centralized error handling middleware.
+    category: "coding"
+    tags: [error-handling, errors, exceptions, middleware, patterns]
+    relevance_signals:
+      files: ["src/errors/*", "src/middleware/*"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a centralized error handling system:
+      > 1. Custom error classes (NotFoundError, ValidationError, etc.)
+      > 2. Error handling middleware for Express
+      > 3. Client-side error boundary component
+      > 4. Consistent error response format
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "logging-setup"
+    title: "Logging Infrastructure Setup"
+    description: |
+      Have Claude set up structured logging for your application. Claude can
+      configure logging libraries, set up log levels, create middleware for
+      request logging, and integrate with log aggregation services.
+    category: "coding"
+    tags: [logging, structured-logging, monitoring, observability, pino, winston]
+    relevance_signals:
+      files: ["src/logger.*", "src/lib/logger.*"]
+      frameworks: ["pino", "winston", "bunyan"]
+      indicators: []
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Set up structured logging with Pino:
+      > - Request/response logging middleware
+      > - Error logging with stack traces
+      > - Log levels per environment (debug in dev, info in prod)
+      > - Correlation IDs for request tracing
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "github-issue-workflow"
+    title: "GitHub Issue Workflow"
+    description: |
+      Use Claude Code to work directly with GitHub issues. Claude can read
+      issue descriptions, implement the requested feature or fix, create
+      a branch, and open a PR referencing the issue.
+    category: "workflow"
+    tags: [github, issues, workflow, automation, pr]
+    relevance_signals:
+      files: [".github/ISSUE_TEMPLATE/*"]
+      frameworks: []
+      indicators: ["has_ci", "team_project"]
+      workflow_patterns: ["feature_branches"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Read GitHub issue #123 and implement the requested feature.
+      > Create a branch, make the changes, add tests, and open a PR.
+
+      # Claude will:
+      # 1. Read the issue via gh CLI
+      # 2. Create a feature branch
+      # 3. Implement the change
+      # 4. Add tests
+      # 5. Open a PR referencing the issue
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "conventional-commits"
+    title: "Conventional Commits"
+    description: |
+      Configure Claude to follow Conventional Commits format. Add the convention
+      to your CLAUDE.md and Claude will automatically use the correct format
+      for all commit messages.
+    category: "workflow"
+    tags: [conventional-commits, git, commit-messages, semver, changelog]
+    relevance_signals:
+      files: [".commitlintrc*", "commitlint.config.*", "CLAUDE.md"]
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: ["conventional_commits"]
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # In CLAUDE.md:
+      ## Git Conventions
+      Use conventional commits: type(scope): description
+      Types: feat, fix, docs, style, refactor, test, chore
+
+      # Claude will create commits like:
+      # feat(auth): add password reset flow
+      # fix(api): handle null user in GET /users/:id
+      # test(payments): add integration tests for checkout
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "typescript-strict-mode"
+    title: "TypeScript Strict Mode Assistance"
+    description: |
+      Have Claude help enable and fix TypeScript strict mode issues. Claude
+      can add proper type annotations, fix null checks, handle strictNullChecks,
+      and resolve all strict mode violations.
+    category: "coding"
+    tags: [typescript, strict, types, null-safety, type-annotations]
+    relevance_signals:
+      files: ["tsconfig.json", "*.ts", "*.tsx"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Enable strict mode in tsconfig.json and fix all resulting errors.
+      > Don't use `any` types - use proper type annotations.
+
+      > Fix all strictNullChecks violations in src/services/
+      > Use proper null guards and optional chaining.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "api-client-generation"
+    title: "API Client Generation"
+    description: |
+      Have Claude generate type-safe API clients from OpenAPI specs, GraphQL
+      schemas, or existing API endpoints. Includes proper error handling,
+      authentication, and request/response typing.
+    category: "coding"
+    tags: [api-client, openapi, graphql, codegen, type-safe]
+    relevance_signals:
+      files: ["openapi.yaml", "openapi.json", "schema.graphql", "*.graphql"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Generate a type-safe API client from our OpenAPI spec
+      > at openapi.yaml. Include:
+      > - Full TypeScript types for all endpoints
+      > - Authentication header handling
+      > - Error response typing
+      > - Request/response interceptors
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "state-management-setup"
+    title: "State Management Setup"
+    description: |
+      Have Claude set up or refactor state management in your frontend app.
+      Claude can configure Redux, Zustand, Jotai, or other state management
+      libraries following best practices.
+    category: "coding"
+    tags: [state-management, redux, zustand, jotai, frontend, store]
+    relevance_signals:
+      files: ["src/store/*", "src/stores/*", "src/state/*"]
+      frameworks: ["redux", "zustand", "jotai", "mobx", "recoil"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Migrate from Redux to Zustand.
+      > 1. Create Zustand stores matching our Redux slices
+      > 2. Update all component connections
+      > 3. Remove Redux dependencies
+      > 4. Update tests
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "websocket-implementation"
+    title: "WebSocket Implementation"
+    description: |
+      Have Claude implement WebSocket communication for real-time features.
+      Claude can set up both server and client sides with proper reconnection
+      logic, heartbeats, and type-safe message handling.
+    category: "coding"
+    tags: [websocket, real-time, socket, events, bidirectional]
+    relevance_signals:
+      files: ["src/ws/*", "src/socket/*"]
+      frameworks: ["socket.io", "ws"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Implement real-time notifications using WebSockets:
+      > 1. Server-side WebSocket handler with authentication
+      > 2. Client-side hook with auto-reconnection
+      > 3. Type-safe message protocol
+      > 4. Heartbeat/ping-pong for connection health
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "caching-strategy"
+    title: "Caching Strategy Implementation"
+    description: |
+      Have Claude implement caching strategies for your application. Claude
+      can set up Redis caching, browser caching headers, React Query/SWR
+      patterns, and memoization.
+    category: "coding"
+    tags: [caching, redis, memoization, performance, react-query, swr]
+    relevance_signals:
+      files: ["src/cache/*", "src/lib/cache.*"]
+      frameworks: ["redis", "react-query", "swr"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Implement a caching layer for the API:
+      > 1. Redis cache for database queries
+      > 2. Cache invalidation on writes
+      > 3. TTL-based expiration
+      > 4. Cache-aside pattern
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "ci-workflow-generation"
+    title: "CI/CD Workflow Generation"
+    description: |
+      Have Claude generate CI/CD workflows for GitHub Actions, GitLab CI,
+      or other platforms. Claude creates pipelines with testing, linting,
+      building, and deployment stages.
+    category: "automation"
+    tags: [ci-cd, github-actions, gitlab-ci, pipeline, deployment]
+    relevance_signals:
+      files: [".github/workflows/*", ".gitlab-ci.yml"]
+      frameworks: []
+      indicators: ["has_ci"]
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a GitHub Actions workflow that:
+      > 1. Runs on PRs to main
+      > 2. Installs dependencies with pnpm
+      > 3. Runs lint, typecheck, and tests in parallel
+      > 4. Builds the app
+      > 5. Deploys to staging on merge
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "infrastructure-as-code"
+    title: "Infrastructure as Code Assistance"
+    description: |
+      Have Claude write and review infrastructure as code using Terraform,
+      Pulumi, CDK, or CloudFormation. Claude can generate infrastructure
+      configs and explain existing setups.
+    category: "coding"
+    tags: [iac, terraform, pulumi, cdk, cloudformation, infrastructure]
+    relevance_signals:
+      files: ["*.tf", "pulumi/*", "cdk.json", "template.yaml", "*.tf.json"]
+      frameworks: ["terraform", "pulumi", "cdk", "cloudformation"]
+      indicators: []
+      workflow_patterns: ["ci_cd_heavy"]
+    difficulty: "advanced"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a Terraform config for:
+      > - ECS Fargate service
+      > - Application Load Balancer
+      > - RDS PostgreSQL instance
+      > - VPC with public/private subnets
+      > Follow AWS best practices for security
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "rust-specific-tips"
+    title: "Rust Development with Claude"
+    description: |
+      Claude excels at Rust development: ownership and borrowing fixes,
+      lifetime annotations, trait implementations, and idiomatic Rust
+      patterns. Great for fighting the borrow checker.
+    category: "coding"
+    tags: [rust, cargo, ownership, borrowing, lifetimes, traits]
+    relevance_signals:
+      files: ["Cargo.toml", "Cargo.lock", "*.rs"]
+      frameworks: ["actix-web", "axum", "tokio", "rocket"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Fix the borrow checker error in src/handlers/auth.rs
+      > Explain why the current code doesn't compile and the idiomatic fix
+
+      > Implement the Display trait for our Error enum
+      > Add proper From implementations for all error types
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "python-specific-tips"
+    title: "Python Development with Claude"
+    description: |
+      Claude handles Python development well: type hints, dataclasses,
+      async/await patterns, virtual environments, and Pythonic code
+      transformations.
+    category: "coding"
+    tags: [python, type-hints, async, dataclasses, pythonic]
+    relevance_signals:
+      files: ["pyproject.toml", "requirements.txt", "setup.py", "Pipfile", "*.py"]
+      frameworks: ["django", "flask", "fastapi", "pytest"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Add type hints to all functions in src/services/
+      > Use modern Python 3.12 syntax (str | None instead of Optional[str])
+
+      > Convert this synchronous code to async using asyncio
+      > and aiohttp for the HTTP calls
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "go-specific-tips"
+    title: "Go Development with Claude"
+    description: |
+      Claude handles Go development: error handling patterns, goroutines,
+      channels, interfaces, and idiomatic Go code. Great for concurrent
+      programming patterns.
+    category: "coding"
+    tags: [go, golang, goroutines, channels, interfaces, error-handling]
+    relevance_signals:
+      files: ["go.mod", "go.sum", "*.go"]
+      frameworks: ["gin", "echo", "fiber"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Implement the Worker pool pattern using goroutines and channels
+      > Handle graceful shutdown with context cancellation
+
+      > Refactor this code to use proper Go error wrapping
+      > with fmt.Errorf and %w verb
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "nextjs-specific-tips"
+    title: "Next.js Development with Claude"
+    description: |
+      Claude knows Next.js patterns deeply: App Router, Server Components,
+      Server Actions, middleware, caching strategies, and ISR. Great for
+      both Pages Router and App Router projects.
+    category: "coding"
+    tags: [nextjs, react, server-components, app-router, server-actions]
+    relevance_signals:
+      files: ["next.config.*", "app/layout.*", "app/page.*", "pages/_app.*"]
+      frameworks: ["nextjs"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Convert this client component to a Server Component
+      > Move the data fetching to the server side
+      > Add proper loading and error states
+
+      > Create a Server Action for the form submission
+      > with Zod validation and error handling
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "django-specific-tips"
+    title: "Django Development with Claude"
+    description: |
+      Claude handles Django development: models, views, serializers,
+      migrations, admin configuration, and Django REST Framework patterns.
+    category: "coding"
+    tags: [django, python, drf, models, views, serializers, migrations]
+    relevance_signals:
+      files: ["manage.py", "settings.py", "urls.py", "models.py", "views.py"]
+      frameworks: ["django"]
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a new Django app for order management:
+      > 1. Order model with proper fields and relationships
+      > 2. DRF serializers with validation
+      > 3. ViewSet with filtering and pagination
+      > 4. URL configuration
+      > 5. Admin interface customization
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "keybindings-customization"
+    title: "Custom Keybindings"
+    description: |
+      Customize Claude Code keyboard shortcuts by editing ~/.claude/keybindings.json.
+      Rebind keys, add chord shortcuts, and configure the input experience
+      to match your preferences.
+    category: "configuration"
+    tags: [keybindings, keyboard, shortcuts, customization, preferences]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # ~/.claude/keybindings.json
+      {
+        "bindings": [
+          {
+            "key": "ctrl+s",
+            "command": "submit"
+          },
+          {
+            "key": "ctrl+k ctrl+c",
+            "command": "compact"
+          }
+        ]
+      }
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "clipboard-image-support"
+    title: "Clipboard and Image Support"
+    description: |
+      Paste images and screenshots directly into Claude Code for visual
+      analysis. Claude can read UI screenshots, diagrams, error screenshots,
+      and design mockups to understand visual context.
+    category: "workflow"
+    tags: [clipboard, images, screenshots, visual, multimodal]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Paste a screenshot directly into Claude Code
+      # Claude can:
+      # - Read error dialogs from screenshots
+      # - Analyze UI designs and implement them
+      # - Compare current UI with design mockups
+      # - Debug visual rendering issues
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "resume-conversation"
+    title: "Resume Previous Conversations"
+    description: |
+      Resume a previous Claude Code conversation to continue where you left
+      off. Claude can pick up the context from a prior session without
+      re-explaining everything.
+    category: "workflow"
+    tags: [resume, conversation, history, continuity, session]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Resume the most recent conversation
+      claude --resume
+
+      # Or continue from a specific session
+      claude --resume <session-id>
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "multi-turn-refinement"
+    title: "Multi-Turn Refinement"
+    description: |
+      Iteratively refine Claude's output through multi-turn conversations.
+      Ask for adjustments, provide feedback, and guide Claude toward the
+      exact solution you need.
+    category: "workflow"
+    tags: [iteration, refinement, feedback, multi-turn, conversation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Create a login form component
+      [Claude creates it]
+      > Add password visibility toggle
+      [Claude updates]
+      > Make it responsive and add loading state
+      [Claude updates]
+      > Add form validation with error messages
+      [Claude updates]
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "scaffold-new-project"
+    title: "New Project Scaffolding"
+    description: |
+      Have Claude scaffold a new project from scratch with your preferred
+      stack, configuration, and directory structure. Claude sets up everything
+      from package.json to CI/CD workflows.
+    category: "workflow"
+    tags: [scaffold, new-project, setup, boilerplate, initialization]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Scaffold a new Next.js 14 project with:
+      > - TypeScript strict mode
+      > - Tailwind CSS
+      > - Prisma with PostgreSQL
+      > - NextAuth.js
+      > - Jest + React Testing Library
+      > - ESLint + Prettier
+      > - GitHub Actions CI
+      > - Docker setup for local development
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "git-bisect-assistance"
+    title: "Git Bisect Assistance"
+    description: |
+      Use Claude to help with git bisect to find the commit that introduced
+      a bug. Claude can automate the bisect process and analyze suspect commits.
+    category: "workflow"
+    tags: [git, bisect, debugging, regression, commit-history]
+    relevance_signals:
+      files: [".git/config"]
+      frameworks: []
+      indicators: ["has_tests"]
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > The login feature broke sometime in the last 20 commits.
+      > Help me find the problematic commit using git bisect.
+      > The test `npm test -- --testNamePattern="login"` should pass.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "code-linting-fixing"
+    title: "Automated Lint Fixing"
+    description: |
+      Have Claude fix all lint errors and warnings in your codebase. Claude
+      understands ESLint, Prettier, Ruff, Clippy, and other linter rules
+      and can fix violations while maintaining code correctness.
+    category: "coding"
+    tags: [linting, eslint, prettier, ruff, clippy, code-quality]
+    relevance_signals:
+      files: [".eslintrc*", ".prettierrc*", "ruff.toml", "clippy.toml"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Fix all ESLint errors in the codebase.
+      > Don't just disable rules - fix the underlying issues.
+      > Run `npm run lint` to verify all issues are resolved.
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "mcp-custom-tools"
+    title: "Building Custom MCP Tools"
+    description: |
+      Build custom MCP tools to extend Claude Code with project-specific
+      capabilities. Create tools for database access, internal APIs,
+      deployment, or any custom workflow.
+    category: "integration"
+    tags: [mcp, custom-tools, extensibility, protocol, servers]
+    relevance_signals:
+      files: [".claude/mcp.json"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code/mcp"
+      date: "2025-06-01"
+    example: |
+      // Custom MCP tool server
+      import { Server } from '@modelcontextprotocol/sdk/server';
+
+      const server = new Server({
+        name: 'my-custom-tools',
+        version: '1.0.0',
+      });
+
+      server.setRequestHandler('tools/call', async (request) => {
+        if (request.params.name === 'deploy') {
+          // Custom deployment logic
+          return { content: [{ type: 'text', text: 'Deployed!' }] };
+        }
+      });
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "terminal-cli-environment"
+    title: "Terminal CLI Environment"
+    description: |
+      Claude Code's primary interface is the terminal CLI. It runs in any
+      terminal emulator with full access to your filesystem, git, and all
+      command-line tools.
+    category: "integration"
+    tags: [terminal, cli, command-line, shell, primary]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      # Install Claude Code
+      npm install -g @anthropic-ai/claude-code
+
+      # Start a session
+      cd /path/to/project
+      claude
+
+      # Or run a one-shot prompt
+      claude -p "Explain this codebase"
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"
+
+  - id: "auto-test-fix-loop"
+    title: "Auto Test-Fix Loop"
+    description: |
+      Ask Claude to run tests, fix failures, and repeat until all tests pass.
+      This automated loop is one of the most powerful ways to use Claude for
+      bug fixing and feature development.
+    category: "workflow"
+    tags: [testing, auto-fix, loop, iteration, ci]
+    relevance_signals:
+      files: ["package.json", "Makefile", "pyproject.toml"]
+      frameworks: []
+      indicators: ["has_tests"]
+      workflow_patterns: ["tdd", "ci_cd_heavy"]
+    difficulty: "intermediate"
+    source:
+      author: "community"
+      url: "https://docs.anthropic.com/en/docs/claude-code"
+      date: "2025-06-01"
+    example: |
+      > Run `npm test` and fix any failures. Keep running tests
+      > until they all pass. Don't skip or delete tests.
+
+      # Claude will:
+      # 1. Run the test suite
+      # 2. Read the failure output
+      # 3. Fix the code
+      # 4. Run tests again
+      # 5. Repeat until green
+    added_date: "2026-03-31"
+    last_verified: "2026-03-31"

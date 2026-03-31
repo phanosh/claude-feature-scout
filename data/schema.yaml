@@ -1,0 +1,115 @@
+# Feature Database Schema Reference
+#
+# Each entry in features.yaml must follow this schema.
+# Run `python scripts/validate-features.py` to check.
+
+feature_schema:
+  id:
+    type: string
+    required: true
+    format: kebab-case (lowercase letters, numbers, hyphens only)
+    description: Unique identifier for the feature
+    example: "worktrees-parallel-sessions"
+
+  title:
+    type: string
+    required: true
+    description: Human-readable title (concise, descriptive)
+    example: "Run parallel Claude sessions with git worktrees"
+
+  description:
+    type: string (multiline)
+    required: true
+    description: 1-3 sentence explanation of the feature
+    example: |
+      Use git worktrees to run multiple Claude sessions simultaneously,
+      each in its own branch.
+
+  category:
+    type: string
+    required: true
+    allowed_values:
+      - workflow       # Session management, worktrees, parallel work, scheduling
+      - configuration  # CLAUDE.md, settings, permissions, model selection
+      - automation     # Hooks, GitHub Actions, CI/CD, scheduled tasks
+      - skills         # Custom skills, slash commands, plugins
+      - integration    # MCP servers, Chrome, Slack, desktop app, VS Code, JetBrains
+      - coding         # Code generation, TDD, debugging, refactoring, review
+      - navigation     # Codebase exploration, search, context management
+      - remote         # SSH, headless, mobile, Dispatch, Remote Control
+      - memory         # CLAUDE.md hierarchy, memory system, project context
+      - performance    # Model settings, compaction, context, fast mode
+
+  tags:
+    type: list of strings
+    required: true
+    description: Free-form lowercase tags for search and matching
+    example: [git, worktrees, parallel, multi-session]
+
+  relevance_signals:
+    type: mapping
+    required: false
+    description: Conditions under which this feature is relevant to a project
+    fields:
+      files:
+        type: list of glob patterns
+        description: If any match project files, feature is relevant
+        example: [".git", "package.json"]
+      frameworks:
+        type: list of strings
+        description: Framework identifiers
+        example: ["nextjs", "django"]
+      indicators:
+        type: list of strings
+        description: Abstract project traits
+        allowed_values:
+          - large_codebase   # >500 files
+          - monorepo         # Multiple packages/workspaces
+          - has_tests        # Test directories/files present
+          - has_ci           # CI/CD configuration present
+          - uses_docker      # Dockerfile present
+          - has_claude_md    # CLAUDE.md exists
+          - has_custom_skills # .claude/skills/ has entries
+          - has_hooks        # Hooks configured in settings
+          - team_project     # Multiple contributors
+          - many_branches    # >10 git branches
+          - uses_claude_code # .claude/ directory exists
+      workflow_patterns:
+        type: list of strings
+        description: Detected workflow styles
+        allowed_values:
+          - tdd                  # Test-driven development
+          - feature_branches     # Feature branch workflow
+          - trunk_based          # Trunk-based development
+          - conventional_commits # Conventional commit messages
+          - parallel_development # Multiple concurrent work streams
+          - documentation_heavy  # Significant documentation
+          - ci_cd_heavy          # Heavy CI/CD usage
+
+  difficulty:
+    type: string
+    required: true
+    allowed_values: [beginner, intermediate, advanced]
+
+  source:
+    type: mapping
+    required: false
+    fields:
+      author: string   # Twitter handle or "anthropic-docs" or "community"
+      url: string      # URL to source
+      date: string     # YYYY-MM-DD
+
+  example:
+    type: string (multiline)
+    required: true
+    description: Code or command showing how to use the feature
+
+  added_date:
+    type: string
+    required: false
+    format: YYYY-MM-DD
+
+  last_verified:
+    type: string
+    required: false
+    format: YYYY-MM-DD

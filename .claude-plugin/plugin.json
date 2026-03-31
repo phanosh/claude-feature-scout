@@ -1,0 +1,18 @@
+{
+  "name": "claude-feature-scout",
+  "description": "Discover Claude Code features relevant to your project. Type /claude-tips for personalized recommendations.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Nicodemos Varnava"
+  },
+  "homepage": "https://github.com/nicodemosvarnava/claude-feature-scout",
+  "repository": "https://github.com/nicodemosvarnava/claude-feature-scout",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "tips",
+    "features",
+    "discovery",
+    "productivity"
+  ]
+}
