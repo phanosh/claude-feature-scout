@@ -27,7 +27,7 @@ Restart Claude Code. The `/claude-tips` and `/scrape-features` commands are now 
 To update later:
 
 ```bash
-claude plugin update claude-feature-scout
+claude plugin update claude-feature-scout@claude-feature-scout
 ```
 
 ## Commands
