@@ -47,7 +47,7 @@ The database updates automatically. Set up a daily scrape with Claude Code's bui
 /schedule daily /scrape-features
 ```
 
-This runs a Claude agent that searches Twitter/X ([@claudeai](https://x.com/claudeai), [@bcherny](https://x.com/bcherny), [@amorriscode](https://x.com/amorriscode)) and the official docs for new features, deduplicates them, and pushes updates to the repo. Runs on your Max subscription -- no API keys, no CI, no extra cost.
+This runs a Claude agent that searches Twitter/X ([@claudeai](https://x.com/claudeai), [@bcherny](https://x.com/bcherny), [@amorriscode](https://x.com/amorriscode)) and the official docs for new features, deduplicates them, and opens a PR with the updates. Runs on your Max subscription -- no API keys, no CI, no extra cost.
 
 You can also run `/scrape-features` manually anytime.
 
