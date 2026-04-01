@@ -3,10 +3,10 @@
   "description": "Discover Claude Code features relevant to your project. Type /claude-tips for personalized recommendations.",
   "version": "0.1.0",
   "author": {
-    "name": "Nicodemos Varnava"
+    "name": "Phanos Hadjikyriakou"
   },
-  "homepage": "https://github.com/nicodemosvarnava/claude-feature-scout",
-  "repository": "https://github.com/nicodemosvarnava/claude-feature-scout",
+  "homepage": "https://github.com/phanosh/claude-feature-scout",
+  "repository": "https://github.com/phanosh/claude-feature-scout",
   "license": "MIT",
   "keywords": [
     "claude-code",

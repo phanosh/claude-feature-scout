@@ -91,6 +91,10 @@ Found a tip that's not in the database? Add it:
 3. Run `python scripts/validate-features.py data/features.yaml`
 4. Open a PR
 
+## Author
+
+[Phanos Hadjikyriakou](https://x.com/phanosha)
+
 ## License
 
 MIT

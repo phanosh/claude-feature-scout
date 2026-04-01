@@ -3,7 +3,7 @@
   "name": "claude-feature-scout",
   "description": "Discover Claude Code features relevant to your project with personalized recommendations",
   "owner": {
-    "name": "Nicodemos Varnava"
+    "name": "Phanos Hadjikyriakou"
   },
   "plugins": [
     {
