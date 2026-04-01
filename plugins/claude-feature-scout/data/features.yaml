@@ -1,6 +1,6 @@
 # Claude Feature Scout - Feature Database
 # Last updated: 2026-04-01
-# Total features: 145
+# Total features: 149
 #
 # Schema: see data/schema.yaml
 # Contributing: see CONTRIBUTING.md
@@ -4258,5 +4258,135 @@ features:
       #   3. Claude continues or adjusts
       #
       # Requires a channel server with "permission" capability
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "statusline-rate-limits"
+    title: "Rate Limit Display in Statusline"
+    description: |
+      Statusline scripts now receive a rate_limits field, letting you display
+      your Claude.ai rate limit usage directly in the terminal statusline.
+      Useful for monitoring consumption during long sessions without leaving
+      your workflow.
+    category: "configuration"
+    tags: [statusline, rate-limits, usage, monitoring, quota]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["heavy_usage", "team_plan"]
+      workflow_patterns: ["long_sessions", "cost_monitoring"]
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-25"
+    example: |
+      # In .claude/settings.json, configure a statusline script:
+      {
+        "statusline": {
+          "script": "echo \"Limits: ${rate_limits}\""
+        }
+      }
+      # The rate_limits field is now available to your script,
+      # showing current Claude.ai quota usage in the statusline.
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "settings-plugin-source"
+    title: "Inline Plugin Declaration in settings.json"
+    description: |
+      Declare plugin marketplace entries directly in settings.json using
+      source: 'settings' instead of requiring a separate plugin repository.
+      Simplifies plugin distribution for teams and personal setups.
+    category: "skills"
+    tags: [plugins, settings, marketplace, configuration, skills]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["custom_skills", "team_setup"]
+      workflow_patterns: ["plugin_development", "team_configuration"]
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-25"
+    example: |
+      # In .claude/settings.json, declare a plugin inline:
+      {
+        "plugins": {
+          "my-plugin": {
+            "source": "settings",
+            "skills": {
+              "my-skill": {
+                "description": "My custom skill",
+                "path": "./skills/my-skill/SKILL.md"
+              }
+            }
+          }
+        }
+      }
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "skill-effort-frontmatter"
+    title: "Effort Frontmatter for Skills and Slash Commands"
+    description: |
+      Skills and custom slash commands can now declare an effort level
+      in their SKILL.md frontmatter. This tells Claude how much reasoning
+      effort to apply when executing the skill, enabling lighter-weight
+      skills to run faster.
+    category: "skills"
+    tags: [skills, effort, frontmatter, performance, slash-commands]
+    relevance_signals:
+      files: ["**/SKILL.md", ".claude/commands/**"]
+      frameworks: []
+      indicators: ["custom_skills", "plugin_development"]
+      workflow_patterns: ["skill_authoring", "plugin_development"]
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-25"
+    example: |
+      # In your SKILL.md frontmatter:
+      ---
+      name: quick-lint
+      description: Fast lint check
+      effort: low
+      ---
+
+      # "effort" can be: low, medium, high
+      # Low-effort skills run faster with less reasoning overhead
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "webfetch-claude-user-agent"
+    title: "WebFetch Claude-User Identification for robots.txt"
+    description: |
+      WebFetch now identifies as Claude-User in its user-agent string,
+      allowing site operators to recognize and allowlist Claude Code
+      traffic via robots.txt. Makes web scraping workflows more
+      transparent and compliant.
+    category: "integration"
+    tags: [webfetch, user-agent, robots-txt, web, scraping, compliance]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["web_scraping", "documentation_fetching"]
+      workflow_patterns: ["web_research", "documentation_lookup"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-20"
+    example: |
+      # WebFetch now sends "Claude-User" in the user-agent header.
+      # Site operators can allowlist in robots.txt:
+      #
+      # User-agent: Claude-User
+      # Allow: /docs/
+      # Allow: /api/
+      #
+      # No configuration needed on your end — this is automatic.
     added_date: "2026-04-01"
     last_verified: "2026-04-01"
