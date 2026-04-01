@@ -1,6 +1,6 @@
 # Claude Feature Scout - Feature Database
-# Last updated: 2026-03-31
-# Total features: 141
+# Last updated: 2026-04-01
+# Total features: 145
 #
 # Schema: see data/schema.yaml
 # Contributing: see CONTRIBUTING.md
@@ -2392,13 +2392,14 @@ features:
   # ============================================================================
 
   - id: "voice-input"
-    title: "Voice Input"
+    title: "Voice Mode with /voice Command"
     description: |
-      Use voice input to dictate prompts to Claude Code instead of typing.
-      Useful for longer descriptions, brainstorming sessions, and when
-      your hands are busy.
+      Activate voice mode with /voice to dictate prompts using push-to-talk.
+      Hold spacebar to speak, release to send. Speech is transcribed live into
+      the prompt input so you can mix voice and typing. Supports 20 languages.
+      Requires Claude Code v2.1.69+. Available for Pro, Max, Team, Enterprise.
     category: "performance"
-    tags: [voice, input, dictation, accessibility, hands-free]
+    tags: [voice, input, dictation, accessibility, hands-free, push-to-talk]
     relevance_signals:
       files: []
       frameworks: []
@@ -2406,16 +2407,20 @@ features:
       workflow_patterns: []
     difficulty: "beginner"
     source:
-      author: "bcherny"
-      url: "https://howborisusesclaudecode.com"
-      date: "2025-07-01"
+      author: "anthropic-docs"
+      url: "https://code.claude.com/docs/en/voice-dictation"
+      date: "2026-03-03"
     example: |
-      # Enable voice input in Claude Code settings
-      # Click the microphone icon or use the keyboard shortcut
-      # Speak your prompt naturally
-      # Claude transcribes and processes your request
+      # Activate voice mode
+      /voice
+
+      # Hold spacebar to speak, release to send
+      # Speech is transcribed live into the prompt input
+
+      # Rebind the push-to-talk key in ~/.claude/keybindings.json:
+      # { "voice:pushToTalk": "meta+k" }
     added_date: "2026-03-31"
-    last_verified: "2026-03-31"
+    last_verified: "2026-04-01"
 
   - id: "keyboard-shortcuts"
     title: "Essential Keyboard Shortcuts"
@@ -4133,3 +4138,125 @@ features:
       CLAUDE_CODE_NO_FLICKER=1 claude
     added_date: "2026-03-31"
     last_verified: "2026-03-31"
+
+  - id: "ultrathink-keyword"
+    title: "Ultrathink Keyword for Maximum Reasoning"
+    description: |
+      Drop "ultrathink" anywhere in your prompt to temporarily activate max
+      effort for that single turn without changing your session /effort setting.
+      Triggers the full 31,999 token thinking budget. Re-introduced in v2.1.68.
+      Only works in Claude Code (not claude.ai web).
+    category: "workflow"
+    tags: [ultrathink, thinking, reasoning, effort, deep-analysis]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["complex_logic", "large_codebase"]
+      workflow_patterns: ["deep_reasoning", "debugging"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-10"
+    example: |
+      # Add "ultrathink" anywhere in your prompt for max reasoning:
+      ultrathink about why this auth flow keeps failing
+
+      # Or at the end:
+      Review this complex migration script, ultrathink
+
+      # Unlike /effort max, this only applies to the current turn
+      # Your session effort level stays unchanged
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "named-subagents-typeahead"
+    title: "Named Subagents in @ Mention Typeahead"
+    description: |
+      Custom named subagents now appear in the @ mention typeahead suggestions.
+      Type @ followed by your subagent name to quickly invoke specific agents
+      without typing the full command. Makes multi-agent workflows faster.
+    category: "workflow"
+    tags: [subagents, typeahead, autocomplete, agents, mentions]
+    relevance_signals:
+      files: [".claude/settings.json", "CLAUDE.md"]
+      frameworks: []
+      indicators: ["custom_tooling", "multi_agent"]
+      workflow_patterns: ["parallel_development", "multi_agent"]
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-20"
+    example: |
+      # Define named subagents in your CLAUDE.md or settings
+      # Then type @ in the prompt to see them in typeahead:
+      #   @code-reviewer - review this PR
+      #   @test-writer - generate tests for auth module
+      #
+      # Named subagents appear alongside files and other @ completions
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "output-token-limits-raised"
+    title: "Raised Output Token Limits (64k/128k)"
+    description: |
+      Default max output for Opus 4.6 raised to 64k tokens. Upper ceiling
+      raised to 128k tokens for both Opus 4.6 and Sonnet 4.6. Enables much
+      longer code generation, detailed analysis, and large file rewrites
+      without truncation.
+    category: "performance"
+    tags: [tokens, output, limits, opus, sonnet, generation]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["large_codebase", "long_files"]
+      workflow_patterns: ["large_refactors", "code_generation"]
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-15"
+    example: |
+      # No configuration needed — token limits are raised automatically
+      # Opus 4.6: 64k default, up to 128k ceiling
+      # Sonnet 4.6: up to 128k ceiling
+      #
+      # Enables longer outputs for:
+      #   - Full file rewrites without truncation
+      #   - Detailed architectural analysis
+      #   - Large code generation tasks
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
+
+  - id: "channels-permission-relay"
+    title: "Channels Permission Relay to Phone"
+    description: |
+      Channel servers that declare the permission capability can forward
+      tool approval prompts to your phone via --channels. Enables truly
+      autonomous workflows where Claude runs unattended but you approve
+      risky actions remotely. Added in v2.1.81 as research preview.
+    category: "remote"
+    tags: [channels, permissions, relay, mobile, remote, autonomous]
+    relevance_signals:
+      files: [".claude/settings.json"]
+      frameworks: []
+      indicators: ["long_running_tasks"]
+      workflow_patterns: ["autonomous_development", "remote_work"]
+    difficulty: "advanced"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+      date: "2026-03-25"
+    example: |
+      # Start Claude Code with channels permission relay
+      claude --channels
+
+      # When Claude needs approval for a risky action:
+      #   1. Approval prompt is forwarded to your phone
+      #   2. You approve or deny remotely
+      #   3. Claude continues or adjusts
+      #
+      # Requires a channel server with "permission" capability
+    added_date: "2026-04-01"
+    last_verified: "2026-04-01"
