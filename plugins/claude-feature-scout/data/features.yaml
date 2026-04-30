@@ -1,6 +1,6 @@
 # Claude Feature Scout - Feature Database
 # Last updated: 2026-04-21
-# Total features: 158
+# Total features: 164
 #
 # Schema: see data/schema.yaml
 # Contributing: see CONTRIBUTING.md
@@ -4671,5 +4671,198 @@ features:
       # e.g. 270s while a build runs, 1800s during idle windows.
       # Useful when cadence depends on runtime state rather than a fixed
       # interval. Still bounded — runtime clamps delays to [60, 3600].
+    added_date: "2026-04-21"
+    last_verified: "2026-04-21"
+
+  - id: "usage-command"
+    title: "/usage Command — See What's Driving Your Limits"
+    description: |
+      Shows your remaining quota, when limits reset, and your current burn
+      rate. All Claude products share one quota, so /usage reflects combined
+      consumption across claude.ai web and Claude Code. Companion commands:
+      /cost (session $), /stats (patterns), /context (window left).
+    category: "performance"
+    tags: [usage, quota, rate-limit, burn-rate, slash-command, cost]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["long_running_tasks"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://blog.vincentqiao.com/en/posts/claude-code-usage/"
+      date: "2026-04-15"
+    example: |
+      # Check how close you are to the rate limit:
+      /usage
+
+      # Output shows:
+      #   - Remaining quota in current 5-hour window
+      #   - When the window resets
+      #   - Burn rate (tokens/min) at current pace
+      #
+      # Distinguish from:
+      #   /cost     — session $ (API users only)
+      #   /stats    — long-term usage patterns
+      #   /context  — context window remaining
+    added_date: "2026-04-21"
+    last_verified: "2026-04-21"
+
+  - id: "mcp-always-load"
+    title: "MCP alwaysLoad — Skip Tool-Search Deferral"
+    description: |
+      Set `alwaysLoad: true` on an MCP server (or `anthropic/alwaysLoad` on
+      an individual tool) and its tools are loaded into context at session
+      start instead of being deferred behind ToolSearch. Use for the small
+      set of tools needed every turn — each one consumes context budget.
+      Requires v2.1.121+.
+    category: "integration"
+    tags: [mcp, alwaysload, tool-search, deferred-tools, context, configuration]
+    relevance_signals:
+      files: [".mcp.json", ".claude.json"]
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "intermediate"
+    source:
+      author: "anthropic-docs"
+      url: "https://github.com/anthropics/claude-code/releases/tag/v2.1.121"
+      date: "2026-04-16"
+    example: |
+      # .mcp.json — exempt one server from tool-search deferral:
+      {
+        "mcpServers": {
+          "core-tools": {
+            "type": "http",
+            "url": "https://mcp.example.com/mcp",
+            "alwaysLoad": true
+          }
+        }
+      }
+
+      # Per-tool variant (in the MCP server's tool definition):
+      {
+        "name": "search_docs",
+        "_meta": { "anthropic/alwaysLoad": true }
+      }
+
+      # Use sparingly — every always-loaded tool reduces context budget.
+    added_date: "2026-04-21"
+    last_verified: "2026-04-21"
+
+  - id: "plugin-prune-command"
+    title: "claude plugin prune — Remove Orphaned Plugin Dependencies"
+    description: |
+      Cleans up auto-installed plugin dependencies that are no longer
+      required by any active plugin. Useful after uninstalling plugins or
+      migrating between marketplaces — keeps `~/.claude/plugins` lean.
+    category: "skills"
+    tags: [plugin, prune, cleanup, dependencies, cli]
+    relevance_signals:
+      files: [".claude/**/*"]
+      frameworks: []
+      indicators: ["uses_claude_code"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://code.claude.com/docs/en/whats-new"
+      date: "2026-04-15"
+    example: |
+      # Remove orphaned auto-installed plugin dependencies:
+      claude plugin prune
+
+      # Useful after removing plugins:
+      claude plugin uninstall some-marketplace/old-plugin
+      claude plugin prune
+    added_date: "2026-04-21"
+    last_verified: "2026-04-21"
+
+  - id: "skills-typeahead-filter"
+    title: "/skills Type-to-Filter Search Box"
+    description: |
+      The /skills picker now has a type-to-filter search box. Start typing
+      and the list narrows to skill names/descriptions matching the query —
+      handy when you have dozens of installed skills across plugins.
+    category: "skills"
+    tags: [skills, search, typeahead, filter, plugin, ux]
+    relevance_signals:
+      files: [".claude/skills/**/*"]
+      frameworks: []
+      indicators: ["has_custom_skills", "uses_claude_code"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://code.claude.com/docs/en/whats-new"
+      date: "2026-04-15"
+    example: |
+      # Open the skill picker:
+      /skills
+
+      # Type to filter — e.g. "des" narrows to:
+      #   /design-review
+      #   /design-consultation
+      #   /plan-design-review
+      # Arrow keys navigate, Enter to select.
+    added_date: "2026-04-21"
+    last_verified: "2026-04-21"
+
+  - id: "os-ca-cert-trust"
+    title: "OS CA Certificate Trust by Default"
+    description: |
+      Claude Code now trusts the OS certificate store by default, so
+      enterprise TLS proxies (Zscaler, Netskope, corporate MITM CAs) work
+      without extra NODE_EXTRA_CA_CERTS configuration. Removes a major
+      onboarding pain for corporate networks. Available v2.1.101+.
+    category: "configuration"
+    tags: [tls, certificate, enterprise, proxy, ca, networking]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: ["team_project"]
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://help.apiyi.com/en/claude-code-changelog-2026-april-updates-en.html"
+      date: "2026-04-10"
+    example: |
+      # Before v2.1.101, you needed:
+      export NODE_EXTRA_CA_CERTS=/path/to/corporate-ca-bundle.crt
+
+      # As of v2.1.101+, the OS trust store is honored by default —
+      # enterprise TLS proxies (Zscaler, Netskope, Palo Alto, etc.)
+      # work out of the box. No env var required for most setups.
+    added_date: "2026-04-21"
+    last_verified: "2026-04-21"
+
+  - id: "cli-native-binaries"
+    title: "Claude Code CLI Native Binaries"
+    description: |
+      The Claude Code CLI now ships as native platform binaries instead of
+      a Node-only distribution. Faster startup, lower memory footprint, and
+      no separate Node runtime required. Affects install paths and how
+      Homebrew/package managers update Claude Code.
+    category: "performance"
+    tags: [cli, native, binary, performance, startup, install]
+    relevance_signals:
+      files: []
+      frameworks: []
+      indicators: []
+      workflow_patterns: []
+    difficulty: "beginner"
+    source:
+      author: "anthropic-docs"
+      url: "https://code.claude.com/docs/en/whats-new"
+      date: "2026-04-15"
+    example: |
+      # Native binary install removes the Node dependency:
+      brew upgrade claude-code
+
+      # Faster cold start — no Node bootstrap per invocation.
+      # Same `claude` command, same flags; only distribution changed.
+      time claude --version   # noticeably quicker than 2.1.x npm-based builds
     added_date: "2026-04-21"
     last_verified: "2026-04-21"
